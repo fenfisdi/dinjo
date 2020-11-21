@@ -1,0 +1,9 @@
+# ignore everything
+*
+
+# Except
+!*.md
+!.gitignore
+
+# (Except) even if they are in subdirectories of root
+!*/
