@@ -2,10 +2,16 @@
 *
 
 # Except
+
+# /
 !*.md
 !.gitignore
-!seirv_model.py
 !Pipfile*
+
+# /cmodel/
+!seirv_model.py
+!__init__.py
+
 
 # (Except) even if they are in subdirectories of root
 !*/
