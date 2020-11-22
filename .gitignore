@@ -5,6 +5,7 @@
 !*.md
 !.gitignore
 !seirv_model.py
+!Pipfile*
 
 # (Except) even if they are in subdirectories of root
 !*/
