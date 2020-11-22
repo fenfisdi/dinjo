@@ -12,6 +12,8 @@
 !seirv_model.py
 !__init__.py
 
+# /examples/
+!run_seirv_model_colombia.py
 
 # (Except) even if they are in subdirectories of root
 !*/
