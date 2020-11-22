@@ -4,6 +4,7 @@
 # Except
 !*.md
 !.gitignore
+!Pipfile*
 
 # (Except) even if they are in subdirectories of root
 !*/
