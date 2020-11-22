@@ -52,7 +52,7 @@ class ModelSEIRV:
         principal_flux = S * (beta(Ex, b1, c1) * Ex + beta(If, b2, c2) * If + beta(V, b3, c3) * V)
 
         dydt = [
-            Lambda - principal_flux + S * mu,
+            Lambda - principal_flux - S * mu,
             principal_flux - (alpha + mu) * Ex,
             alpha * Ex - (omega + gamma + mu) * If,
             gamma * If - mu * R,
