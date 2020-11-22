@@ -12,6 +12,9 @@
 !seirv_model.py
 !__init__.py
 
+# /tests/
+!test_seirv_model.py
+
 # /examples/
 !run_seirv_model_colombia.py
 
