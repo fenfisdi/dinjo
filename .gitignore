@@ -4,6 +4,7 @@
 # Except
 !*.md
 !.gitignore
+!seirv_model.py
 
 # (Except) even if they are in subdirectories of root
 !*/
