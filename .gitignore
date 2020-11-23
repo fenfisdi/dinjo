@@ -9,8 +9,9 @@
 !Pipfile*
 
 # /cmodel/
-!seirv_model.py
 !__init__.py
+!seirv_model.py
+!optimizer.py
 
 # /tests/
 !test_seirv_model.py
