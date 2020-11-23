@@ -1,4 +1,3 @@
-from cmodel.seirv_model import Parameter, Variable
 from typing import List
 
 import pytest
@@ -91,7 +90,7 @@ def test_parameters_initialization(
         (param.name, param.representation, param.initial_value) for param in parameters
     ]
 
-    assert parameters_source_test ==  parameters_source
+    assert parameters_source_test == parameters_source
 
 
 def test_model_SEIRV_build_model(
