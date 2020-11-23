@@ -60,11 +60,16 @@ class CompartmentalModel:
     def build_model(self, t, y, *args):
         pass
 
-    def run_model(self, method:str = 'RK45'):
+    def run_model(
+        self,
+        parameters: List[float] = None,
+        method:str = 'RK45'
+    ):
         """Integrate model using ``scipy.integrate.solve_ivp``"""
         
         initial_conditions = [sv.initial_value for sv in self.state_variables]
-        parameters = tuple([param.initial_value for param in self.parameters])
+        parameters = parameters if parameters \
+            else tuple([param.initial_value for param in self.parameters])
 
         solution = solve_ivp(
             fun=self.build_model,
