@@ -1,6 +1,8 @@
 import copy
 from typing import List
 
+import math
+
 import cmodel.seirv_model as build_model
 
 class Optimizer:
@@ -16,7 +18,6 @@ class Optimizer:
         self.reference_state_variable = reference_state_variable
         self.reference_values = reference_values
 
-        self._reference_t_values = None
         self.reference_t_values = reference_t_values
 
     @property
@@ -29,6 +30,27 @@ class Optimizer:
             raise AttributeError(
                 "self.reference_values and self.reference_t_values must have the same length"
             )
+
+        for i, t in enumerate(reference_t_values_input[:-1]):
+            if not t < reference_t_values_input[i+1]:
+                raise AttributeError(
+                    "self.reference_t_values must be a list of floats in increasing order"
+                )
+
+        rel_tol = 0.999
+
+        t_span_condition = math.isclose(
+                self.model.t_span[0], self.reference_t_values[0], rel_tol=rel_tol
+            ) and math.isclose(
+                self.model.t_span[1], self.reference_t_values[-1], rel_tol=rel_tol
+            )
+
+        if not t_span_condition:
+            raise AttributeError(
+                "self.model.t_span and self.reference_t_values initial and "
+                "final entries must coincide."
+            )
+
         self._reference_t_values = reference_t_values_input
 
 
