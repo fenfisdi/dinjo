@@ -25,10 +25,6 @@ class Parameter(Variable):
 
 
 class CompartmentalModel:
-    pass
-
-
-class ModelSEIRV(CompartmentalModel):
     def __init__(
         self,
         state_variables: List[StateVariable],
@@ -43,6 +39,28 @@ class ModelSEIRV(CompartmentalModel):
         self.t_steps = t_steps
         self.t_eval = t_eval if t_eval else list(np.linspace(*t_span, t_steps))
     
+    def build_model(self, t, y, *args):
+        pass
+
+    def run_model(self, method:str = 'RK45'):
+        """Integrate model using ``scipy.integrate.solve_ivp``"""
+        
+        initial_conditions = [sv.initial_value for sv in self.state_variables]
+        parameters = tuple([param.initial_value for param in self.parameters])
+
+        solution = solve_ivp(
+            fun=self.build_model,
+            t_span=self.t_span,
+            y0=initial_conditions,
+            method=method,
+            t_eval=self.t_eval,
+            args=parameters
+        )
+
+        return solution
+
+
+class ModelSEIRV(CompartmentalModel):
     def build_model(
         self, t, y,
         Lambda, mu, alpha, omega, gamma, xi1, xi2, sigma, b1, b2, b3, c1, c2, c3
@@ -65,20 +83,3 @@ class ModelSEIRV(CompartmentalModel):
         ]
 
         return dydt
-
-    def run_model(self, method:str = 'RK45'):
-        """Integrate model using ``scipy.integrate.solve_ivp``"""
-        
-        initial_conditions = [sv.initial_value for sv in self.state_variables]
-        parameters = tuple([param.initial_value for param in self.parameters])
-
-        solution = solve_ivp(
-            fun=self.build_model,
-            t_span=self.t_span,
-            y0=initial_conditions,
-            method=method,
-            t_eval=self.t_eval,
-            args=parameters
-        )
-
-        return solution
