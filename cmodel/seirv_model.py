@@ -4,6 +4,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
+
 class Variable:
     """Represents a state variable"""
     def __init__(
@@ -14,6 +15,7 @@ class Variable:
         self.representation = representation
         self.initial_value = initial_value
 
+
 class StateVariable(Variable):
     pass
 
@@ -22,7 +24,11 @@ class Parameter(Variable):
     pass
 
 
-class ModelSEIRV:
+class CompartmentalModel:
+    pass
+
+
+class ModelSEIRV(CompartmentalModel):
     def __init__(
         self,
         state_variables: List[StateVariable],
