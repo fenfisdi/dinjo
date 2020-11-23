@@ -1,7 +1,6 @@
 from typing import List
 
 import cmodel.seirv_model as build_model
-from cmodel.seirv_model import CompartmentalModel
 
 class Optimizer:
     def __init__(
