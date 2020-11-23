@@ -1,3 +1,4 @@
+from math import prod
 from typing import List
 
 import numpy as np
@@ -39,6 +40,23 @@ class CompartmentalModel:
         self.t_steps = t_steps
         self.t_eval = t_eval if t_eval else list(np.linspace(*t_span, t_steps))
     
+    def _get_variable_init_vals(
+        self, variables: List[Variable]
+    ) -> List[float]:
+        return [var.initial_value for var in variables]
+
+    @property
+    def state_variables_init_vals(self) -> List[float]:
+        """Get the values of the model's state variables initial values in the
+        order they are currently stored in ``self.state_variables``."""
+        return self._get_variable_init_vals(self.state_variables)
+
+    @property
+    def parameters_init_vals(self):
+        """Get the values of the model's parameters initial values in the
+        order they are currently stored in ``self.parameters``."""
+        return self._get_variable_init_vals(self.parameters)
+
     def build_model(self, t, y, *args):
         pass
 

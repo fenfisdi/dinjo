@@ -1,3 +1,4 @@
+from cmodel import seirv_model
 from typing import List
 
 import pytest
@@ -57,12 +58,6 @@ def parameters(parameters_source):
     return parameters
 
 
-def values_of_variables(variables: List[seirv.Variable]):
-    """Wraps all initial values of a list of Variable instances in a list"""
-    values = [var.initial_value for var in variables]
-    return values
-
-
 @pytest.fixture
 def model_SEIRV(state_variables, parameters):
     t_span = [0, 171]
@@ -71,6 +66,19 @@ def model_SEIRV(state_variables, parameters):
     model_SEIRV = seirv.ModelSEIRV(state_variables, parameters, t_span, t_steps)
     
     return model_SEIRV
+
+
+def test_state_variables_init_vals(
+    model_SEIRV: seirv.ModelSEIRV,
+    state_variables_source
+):
+    sv_init_vals = [sv[2] for sv in state_variables_source]
+    assert model_SEIRV.state_variables_init_vals == sv_init_vals
+
+
+def test_parameters_init_vals(model_SEIRV: seirv.ModelSEIRV, parameters_source):
+    params = [param[2] for param in parameters_source]
+    assert model_SEIRV.parameters_init_vals == params
 
 
 def test_state_variables_initialization(
@@ -100,8 +108,8 @@ def test_model_SEIRV_build_model(
 ):
     """Tests if evaluation of differential equation defined in SEIRV model is OK"""
 
-    state_variables = values_of_variables(state_variables)
-    parameters = values_of_variables(parameters)
+    state_variables = model_SEIRV.state_variables_init_vals
+    parameters = model_SEIRV.parameters_init_vals
 
     # Expected value calculated in Mathematica, in Boris' script
     expected_diff_eqn_value = approx(
@@ -120,7 +128,7 @@ def test_model_SEIRV_run_model_initial_value(
     model_SEIRV: seirv.ModelSEIRV,
     state_variables: List[seirv.StateVariable]
 ):
-    initial_state_variables = values_of_variables(state_variables)
+    initial_state_variables = model_SEIRV.state_variables_init_vals
     solution = model_SEIRV.run_model()
     solution_initial_values = [y[0] for y in solution.y]
 
