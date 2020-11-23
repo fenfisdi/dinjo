@@ -1,3 +1,4 @@
+import copy
 from typing import List
 
 import cmodel.seirv_model as build_model
@@ -10,7 +11,7 @@ class Optimizer:
         reference_values: List[float],
         reference_t_values: List[float]
     ) -> None:
-        self.model = model
+        self.model = copy.deepcopy(model)
 
         self.reference_state_variable = reference_state_variable
         self.reference_values = reference_values
@@ -32,7 +33,9 @@ class Optimizer:
 
 
     def cost_function(self):
-        """Function to be minimized by the optimizer
+        """Function to be minimized by the optimizer.
+        Initially this will be the 
         """
-
+        self.model.t_eval = self.reference_t_values
+        # solution = self.model.run_model
         pass
