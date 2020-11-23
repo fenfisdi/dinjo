@@ -15,6 +15,7 @@
 
 # /tests/
 !test_seirv_model.py
+!test_optimizer.py
 
 # /examples/
 !run_seirv_model_colombia.py
