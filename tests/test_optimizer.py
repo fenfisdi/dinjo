@@ -26,7 +26,7 @@ def infected(state_variables: build_model.StateVariable):
 @pytest.fixture
 def reference_values():
     """
-    docstring
+    Number of Infections in Colombia by day
     """
     return [
         1, 1, 1, 1, 3, 9, 9, 13, 22, 34, 54, 65, 93, 102, 128, 196, 231, 277,
