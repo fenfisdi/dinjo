@@ -63,6 +63,8 @@ def test_optimizer_initialization(
         )
     except AttributeError:
         assert False
+    else:
+        assert True
 
 
 @pytest.fixture
