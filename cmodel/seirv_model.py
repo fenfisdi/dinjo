@@ -1,9 +1,9 @@
-from math import prod
-from typing import List
+import numbers
+from typing import List, Optional
 
 import numpy as np
+from numpy.lib.arraysetops import isin
 from scipy.integrate import solve_ivp
-import matplotlib.pyplot as plt
 
 
 class Variable:
@@ -22,8 +22,46 @@ class StateVariable(Variable):
 
 
 class Parameter(Variable):
-    pass
+    def __init__(
+        self, name: str, representation: str, initial_value: float = 0,
+        *args, bounds: Optional[List[float]] = None, **kwargs
+    ) -> None:
+        super().__init__(name, representation, initial_value)
+        self.bounds = bounds if bounds else [initial_value, initial_value]
+    
+    @property
+    def bounds(self):
+        """Bounds of the parameters. Needed for optimization.
+        """
+        return self._bounds
+    
+    @bounds.setter
+    def bounds(self, bounds_input):
+        attr_err_message = "bounds must be a list of two increasing numbers."
+        init_val_not_in_bounds_range = "initial_value must be in the range defined by bounds."
+       
+        type_check: bool = (
+            isinstance(bounds_input, list)
+            and len(bounds_input) == 2
+            and isinstance(bounds_input[0], numbers.Number)
+            and isinstance(bounds_input[1], numbers.Number)
+        )
 
+        if not type_check:
+            raise AttributeError(attr_err_message)
+
+        order_check: bool = bounds_input[0] <= bounds_input[1]
+        
+        if not order_check:
+            raise AttributeError(attr_err_message)
+
+        if not (
+            bounds_input[0] <= self.initial_value 
+            and bounds_input[1] >= self.initial_value
+        ):
+            raise AttributeError(init_val_not_in_bounds_range)
+        
+        self._bounds = bounds_input
 
 class CompartmentalModel:
     def __init__(
