@@ -81,6 +81,41 @@ def test_parameters_init_vals(model_SEIRV: seirv.ModelSEIRV, parameters_source):
     assert model_SEIRV.parameters_init_vals == params
 
 
+@pytest.mark.parametrize(
+    'bounds',
+    [
+        [1, 2],
+        [1., 2],
+        [1, 2.],
+        [1., 2.]
+    ]
+)
+def test_parameters_bounds(bounds):
+    try:
+        seirv.Parameter("a", "b", 1.5, bounds=bounds)
+    except AttributeError:
+        assert False
+    else:
+        assert True
+
+
+@pytest.mark.parametrize(
+    'initial_value,bounds',
+    [
+        (1.3, "a"),
+        (1.5, (1, 2.)),
+        (1.5, [1, 2, 3]),
+        (1.5, ["a", 2.]),
+        (1.5, [1, "b"]),
+        (1.5, [2, 1]),
+        (0, [1, 2]),
+    ]
+)
+def test_parameters_bounds_error_handling(initial_value, bounds):
+    with pytest.raises(AttributeError):
+        seirv.Parameter("a", "b", initial_value, bounds=bounds)
+
+
 def test_state_variables_initialization(
     state_variables: List[seirv.StateVariable], state_variables_source
 ):
