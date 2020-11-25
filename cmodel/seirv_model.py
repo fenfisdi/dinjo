@@ -106,13 +106,25 @@ class CompartmentalModel:
     ):
         """Integrate model using ``scipy.integrate.solve_ivp``"""
         
-        initial_conditions = [sv.initial_value for sv in self.state_variables]
-        parameters = parameters if (parameters != None) else self.parameters_init_vals
+        parameters = (
+            parameters if parameters is not None else self.parameters_init_vals
+        )
+
+        parameters_permitted_types = (list, tuple, np.ndarray)
+        parameters_type_is_permitted = True
+        
+        for permitted_type in parameters_permitted_types:
+            parameters_type_is_permitted += isinstance(parameters, permitted_type)
+        
+        if not parameters_type_is_permitted:
+            raise TypeError(
+                "parameters must be a list, tuple or numpy.ndarray"
+            )
 
         solution = solve_ivp(
             fun=self.build_model,
             t_span=self.t_span,
-            y0=initial_conditions,
+            y0=self.state_variables_init_vals,
             method=method,
             t_eval=self.t_eval,
             args=parameters

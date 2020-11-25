@@ -3,6 +3,7 @@ from typing import List
 
 import pytest
 from pytest import approx
+import numpy as np
 
 from cmodel import seirv_model as seirv
 
@@ -164,7 +165,9 @@ def test_model_SEIRV_run_model_initial_value(
     state_variables: List[seirv.StateVariable]
 ):
     initial_state_variables = model_SEIRV.state_variables_init_vals
-    solution = model_SEIRV.run_model()
-    solution_initial_values = [y[0] for y in solution.y]
-
-    assert solution_initial_values == approx(initial_state_variables)
+    param_types = (list, tuple, np.array)
+    parameters = model_SEIRV.parameters_init_vals
+    for param_type in param_types:
+        solution = model_SEIRV.run_model(parameters=param_type(parameters))
+        solution_initial_values = [y[0] for y in solution.y]
+        assert solution_initial_values == approx(initial_state_variables)
