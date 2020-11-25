@@ -94,7 +94,7 @@ def test_optimizer_cost_function(
     root_mean_square = seirv_optimizer.cost_function(
         model_SEIRV.parameters_init_vals
     )
-
+    print(root_mean_square)
     # Value calculated with Boris' definition of RootMeanSquare in Mathematica script
     assert root_mean_square == approx(6878.03, rel=0.99)
 
@@ -115,3 +115,16 @@ def test_optimizer_cost_function_cost_method_value_error(
         assert True
     else:
         assert False
+
+
+def test_optimizer_minimize_global(
+    seirv_optimizer: optimizer.Optimizer,
+):
+    """Test if method:`cmodel.Optimize.minimize_global` method works with
+    easiest optimization: fixed parameters via bounds.
+    """
+    minimization_algorithms = ['dual_annealing'] #, 'shgo', , 'brute',]
+    parameters_init_vals = seirv_optimizer.model.parameters_init_vals
+    for algorithm in minimization_algorithms:
+        optimization = seirv_optimizer.minimize_global(algorithm=algorithm)
+        assert optimization.x == approx(parameters_init_vals, rel=0.99)

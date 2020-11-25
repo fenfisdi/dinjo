@@ -1,8 +1,10 @@
 import copy
-from typing import Callable, List, Dict
+from math import cos
+from typing import Callable, List, Dict, Any
 
 import math
 import numpy as np
+import scipy.optimize as opt
 
 from . import seirv_model as build_model
 
@@ -13,7 +15,7 @@ class Optimizer:
         reference_state_variable: build_model.StateVariable,
         reference_values: List[float],
         reference_t_values: List[float],
-        integration_method: str = 'RK45'
+        integration_method: str = 'RK45',
     ) -> None:
         self.model = copy.deepcopy(model)
 
@@ -54,7 +56,8 @@ class Optimizer:
 
         rel_tol = 0.999
 
-        t_span_condition = math.isclose(
+        t_span_condition = \
+            math.isclose(
                 self.model.t_span[0], reference_t_values_input[0], rel_tol=rel_tol
             ) and math.isclose(
                 self.model.t_span[1], reference_t_values_input[-1], rel_tol=rel_tol
@@ -67,7 +70,6 @@ class Optimizer:
             )
 
         self._reference_t_values = reference_t_values_input
-
 
     def cost_function(
         self,
@@ -83,7 +85,7 @@ class Optimizer:
         parameters : str
             parameters of the model to be minimized
         cost_method : str
-            Must be one of ``'root_mean_square'``, etc.
+            Must be one of ``['root_mean_square',]``, etc.
         """
         self.model.t_eval = self.reference_t_values
         solution = self.model.run_model(
@@ -94,7 +96,7 @@ class Optimizer:
         # reference values
         solution_reference = solution.y[self._reference_state_variable_index]
 
-        def rms(solution_reference):
+        def rms(solution_reference) -> float:
             """Root mean square of the difference between ``reference_values``
             and ``solution_reference``.
             
@@ -118,3 +120,47 @@ class Optimizer:
             )
 
         return cost_func(solution_reference)
+
+    def minimize_global(
+        self,
+        cost_method: str = 'root_mean_square',
+        algorithm: str = 'differential_evolution',
+        algorithm_kwargs: Dict[str, Any] = {},
+    ) -> opt.OptimizeResult:
+        """Global minimization of cost function.
+
+        Parameters
+        ----------
+        cost_function_method : str
+            Must be one of the permitted values for cost_method parameter in 
+            :method:`Optimize.cost_function`.
+        """
+        minimize_global_algorithms = {
+            'brute': opt.brute,
+            'differential_evolution':  opt.differential_evolution,
+            'shgo': opt.shgo,
+            'dual_annealing': opt.dual_annealing,
+        }
+
+        try:
+            minimize_algorithm = minimize_global_algorithms[algorithm]
+        except KeyError:
+            raise ValueError(
+                ""
+            )
+
+        # TODO TODO TODO  Change bounds to porper ones
+        # TODO TODO TODO  Change bounds to porper ones
+        # TODO TODO TODO  Change bounds to porper ones
+        bounds = [
+            (param.bounds[0], 1.005 * param.bounds[0]) for param in self.model.parameters
+        ]
+
+        minimization = minimize_algorithm(
+            func=self.cost_function,
+            bounds=bounds,
+            args=(cost_method,),
+            #**algorithm_kwargs
+        )
+
+        return  minimization
