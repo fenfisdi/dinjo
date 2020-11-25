@@ -63,6 +63,7 @@ class Parameter(Variable):
         
         self._bounds = bounds_input
 
+
 class CompartmentalModel:
     def __init__(
         self,
@@ -106,7 +107,7 @@ class CompartmentalModel:
         """Integrate model using ``scipy.integrate.solve_ivp``"""
         
         initial_conditions = [sv.initial_value for sv in self.state_variables]
-        parameters = parameters if parameters \
+        parameters = parameters if parameters != None \
             else tuple([param.initial_value for param in self.parameters])
 
         solution = solve_ivp(
