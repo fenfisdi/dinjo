@@ -117,13 +117,20 @@ def test_optimizer_cost_function_cost_method_value_error(
         assert False
 
 
+skip_minimize_global = True
+@pytest.mark.skipif(
+    skip_minimize_global,
+    reason="This test takes several seconds to complete, run only when needed."
+)
 def test_optimizer_minimize_global(
     seirv_optimizer: optimizer.Optimizer,
 ):
     """Test if method:`cmodel.Optimize.minimize_global` method works with
     easiest optimization: fixed parameters via bounds.
     """
-    minimization_algorithms = ['dual_annealing'] #, 'shgo', , 'brute',]
+    
+    # minimization_algorithms = ['differential_evolution', 'dual_annealing', 'shgo', 'brute',]
+    minimization_algorithms = ['differential_evolution']
     parameters_init_vals = seirv_optimizer.model.parameters_init_vals
     for algorithm in minimization_algorithms:
         optimization = seirv_optimizer.minimize_global(algorithm=algorithm)

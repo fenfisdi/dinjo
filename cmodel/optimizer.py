@@ -153,14 +153,14 @@ class Optimizer:
         # TODO TODO TODO  Change bounds to porper ones
         # TODO TODO TODO  Change bounds to porper ones
         bounds = [
-            (param.bounds[0], 1.005 * param.bounds[0]) for param in self.model.parameters
+            param.bounds for param in self.model.parameters
         ]
 
         minimization = minimize_algorithm(
             func=self.cost_function,
             bounds=bounds,
             args=(cost_method,),
-            #**algorithm_kwargs
+            **algorithm_kwargs
         )
 
         return  minimization
