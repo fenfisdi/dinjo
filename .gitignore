@@ -19,6 +19,7 @@
 
 # /examples/
 !run_seirv_model_colombia.py
+!optimizer_oscillator.py
 
 # (Except) even if they are in subdirectories of root
 !*/

@@ -136,7 +136,6 @@ class Optimizer:
             :method:`Optimize.cost_function`.
         """
         minimize_global_algorithms = {
-            'brute': opt.brute,
             'differential_evolution':  opt.differential_evolution,
             'shgo': opt.shgo,
             'dual_annealing': opt.dual_annealing,
@@ -146,12 +145,10 @@ class Optimizer:
             minimize_algorithm = minimize_global_algorithms[algorithm]
         except KeyError:
             raise ValueError(
-                ""
+                "value of algorithm not permitted. Accepted values are "
+                f"{minimize_global_algorithms.keys()}"
             )
 
-        # TODO TODO TODO  Change bounds to porper ones
-        # TODO TODO TODO  Change bounds to porper ones
-        # TODO TODO TODO  Change bounds to porper ones
         bounds = [
             param.bounds for param in self.model.parameters
         ]
