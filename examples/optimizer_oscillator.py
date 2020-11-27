@@ -15,15 +15,15 @@ from cmodel import optimizer
 
 
 class Oscillator(seirv.CompartmentalModel):
-    def build_model(self, t, y, m, k):
+    def build_model(self, t, y, w):
         """Harmonic Oscillator differential equations
         """
         q, p  = y
 
         # Hamilton's equations
         dydt = [
-            p / m,
-            - k * q
+            p,
+            - (w ** 2) * q
         ]
 
         return dydt
@@ -40,20 +40,17 @@ if __name__ == '__main__':
     )
 
     # Define Paramters
-    m = seirv.Parameter(
-        name='mass', representation='m', initial_value=6.0, bounds=[5, 7]
-    )
-    k = seirv.Parameter(
-        name='force constant', representation='k', initial_value=.5, bounds=[0., 1]
+    omega = seirv.Parameter(
+        name='frequency', representation='w', initial_value=5, bounds=[4, 8]
     )
 
-    t_span = [0, 2 * np.pi * (m.initial_value / k.initial_value)**0.5]
+    t_span = [0, 2 * np.pi / omega.initial_value]
     t_steps = 50
 
     # Instantiate Model
     oscillator_model = Oscillator(
         state_variables=[q, p],
-        parameters=[m, k],
+        parameters=[omega],
         t_span=t_span,
         t_steps=t_steps
     )
@@ -67,7 +64,6 @@ if __name__ == '__main__':
     noise_factor = 0.30
     oscillator_fake_position_data = \
         oscillator_solution.y[0] + (2 * np.random.random(t_steps) - 1) * noise_factor
-
 
     # Optimizer using fake noisy data
     oscillator_optimizer = optimizer.Optimizer(
@@ -95,23 +91,21 @@ if __name__ == '__main__':
     plt.figure()
     plt.plot(
         oscillator_solution.t, oscillator_solution.y[0],
-        'k-', label='Exact Solution'
+        'k-',
+        label='Exact Solution using '
+              f'$\omega={omega.initial_value:.3f}$'
     )
     plt.plot(
         oscillator_solution.t, oscillator_fake_position_data,
         'ro', label='Noisy fake data'
     )
     try:
-        m_to_k_ratio = \
-            parameters_optimization.x[0] / parameters_optimization.x[1]
         plt.plot(
             oscillator_optimal_solution.t, oscillator_optimal_solution.y[0],
             'k-*',
             label='Optimized solution from noisy data\n'
                   f'using {minimization_algorithm} algorithm\n'
-                  f'$m={parameters_optimization.x[0]:.3f}$,  '
-                  f'$k={parameters_optimization.x[1]:.3f}$,  '
-                  f'$m/k={m_to_k_ratio:.3f}$'
+                  f'$\omega={parameters_optimization.x[0]:.3f}$'
         )
     except:
         pass
