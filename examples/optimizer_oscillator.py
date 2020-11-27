@@ -1,6 +1,7 @@
 import os
 from os import stat
 import sys
+from typing import Any, Dict, List, Union
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,16 +31,16 @@ class ModelOscillator(seirv.CompartmentalModel):
 
 
 def oscillator_optimizer_example(
-    q0=1.0,
-    p0=0.0,
-    w0=2 * np.pi,
-    w_bounds=[4, 8],
-    t_span=[0, 1],
-    t_steps=50,
-    fake_data_noise_factor=0.30,
-    minimization_algorithm='differential_evolution',
-    plot_solution=False
-):
+    q0: Union[float, int] = 1.0,
+    p0: Union[float, int] = 0.0,
+    w0: Union[float, int]  = 2 * np.pi,
+    w_bounds: List[Union[float, int]] = [4, 8],
+    t_span: List[Union[float, int]] = [0, 1],
+    t_steps: int = 50,
+    fake_data_noise_factor: float = 0.30,
+    minimization_algorithm: str = 'differential_evolution',
+    plot_solution: bool = False
+) -> Dict[str, Any]:
 
     # Define State Variables
     q = seirv.StateVariable(
@@ -61,8 +62,6 @@ def oscillator_optimizer_example(
         t_span=t_span,
         t_steps=t_steps
     )
-
-    # Define Model fluxes (This Will be done in the next iteration)
 
     # Run the model
     oscillator_solution = oscillator_model.run_model()
