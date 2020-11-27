@@ -1,68 +1,100 @@
 import sys
 import os
 from time import time
+from typing import Any, Dict, List, Union
 
 import matplotlib.pyplot as plt
 
-# Add project root directory to path
+# Add project root and this file's directories to path in order to find cmodel
+# package
 this_file_dir = os.path.dirname(__file__)
 project_root_dir = os.path.join(this_file_dir, '..')
+sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
-from cmodel import seirv_model as seirv
+import cmodel.seirv_model as build_model
+from cmodel_examples_utilities import param_sample_range
 
 
 # Instantiation of state variables and parameters
 
-# In the implementation in which the model is built from scratch
-# StateVariable and Parameter instances initialization might be a bit
+# In the next implementation (in which the model is built from scratch)
+# StateVariable and Parameter instances initialization ought be a bit
 # different, but the idea is the same
 
 # The values of the parameters were obtained from Boris' Mathematica script
-state_variables = [
+# (name, representation, initial_value)
+seirv_state_variables_colombia_src = [
     ("suceptible", "S", 50372424),
     ("exposed", "Ex", 0),
     ("infected", "If", 1),
     ("recovered", "R", 0),
     ("vaccinated", "V", 0),
 ]
-parameters = [
-    ("Lambda", "Lambda", 2083.62),
-    ("mu", "mu", 0.0000150767),
-    ("alpha", "alpha", 0.172414),
-    ("omega", "omega", 0.0114),
-    ("gamma", "gamma", 0.0666667),
-    ("xi1", "xi1", 1.09736),
-    ("xi2", "xi2", 6.32609),
-    ("sigma", "sigma", 1.),
-    ("b1", "b1", 2.91823E-9),
-    ("b2", "b2", 2.67472E-9),
-    ("b3", "b3", 4.635E-9),
-    ("c1", "c1", 0.0000855641),
-    ("c2", "c2", 2.94906E-7),
-    ("c3", "c3", 0.159107),
+
+# List of instances of state variables
+seirv_state_variables_colombia = [
+    build_model.StateVariable(*sv) for sv in seirv_state_variables_colombia_src
 ]
-state_variables = [seirv.StateVariable(*sv) for sv in state_variables]
-parameters = [seirv.Parameter(*param) for param in parameters]
+
+# Parameters not variated by Boris' Mathematica script
+Lambda = 2083.62
+mu = 0.0000150767
+alpha = 0.172414
+omega = 0.0114
+gamma = 0.0666667
+xi2 = 6.32609
+sigma = 1.0
+
+# Optimal parameters found by Boris' Mathematica script
+xi1_opt = 1.09736
+b1_opt = 2.91823E-9 
+b2_opt = 2.67472E-9
+b3_opt = 4.635E-9
+c1_opt = 0.0000855641
+c2_opt = 2.94906E-7
+c3_opt = 0.159107
+
+# Parameters used to define their own bounds via the function
+# param_sample_range
+xi1 = 2.3
+b1, b2, b3 = 1.5 * 3.11e-9, 1.5 * 0.62e-9, 1.5 * 1.03e-9
+
+# Bounds of c parameters used in Boris' Mathematica script
+c_bounds = (0, 1)
+
+# param_range_width used in Boris' Mathematica script
+param_range_width = 3
+
+# Each element of the list refers to a parameter
+# (name, representation, initial_value, bounds)
+seirv_parameters_colombia_src = [
+    ("Lambda", "Lambda", Lambda, (Lambda, Lambda)),
+    ("mu", "mu", mu, (mu, mu)),
+    ("alpha", "alpha", alpha, (alpha, alpha)),
+    ("omega", "omega", omega, (omega, omega)),
+    ("gamma", "gamma", gamma, (gamma, gamma)),
+    ("xi1", "xi1", xi1_opt, param_sample_range(xi1, param_range_width)),
+    ("xi2", "xi2", xi2, (0, 10)),
+    ("sigma", "sigma", sigma, (sigma, sigma)),
+    ("b1", "b1", b1_opt, param_sample_range(b1, param_range_width)),
+    ("b2", "b2", b2_opt, param_sample_range(b2, param_range_width)),
+    ("b3", "b3", b3_opt, param_sample_range(b3, param_range_width)),
+    ("c1", "c1", c1_opt, c_bounds),
+    ("c2", "c2", c2_opt, c_bounds),
+    ("c3", "c3", c3_opt, c_bounds),
+]
+
+# List of instances of parameters
+seirv_parameters_colombia = [
+    build_model.Parameter(*param) for param in seirv_parameters_colombia_src
+]
 
 # Time span and time steps in days
-t_span = [0, 171]
-t_steps = 172
+t_span_col = [0, 171]
+t_steps_col = 172
 
-# Instantiate the model 
-model_SEIRV = seirv.ModelSEIRV(state_variables, parameters, t_span, t_steps)
-
-# In the next iteration of cmodel's API the user will need to define the
-# model here manually by specifying the fluxes of each state variable using
-# some interface such as model_SEIRV.add_flux(...)
-
-# Run the model
-t0 = time()
-solution = model_SEIRV.run_model(method='RK45')
-print(f"Time calculating solution: {time() - t0}")
-
-# Data: Colombia
-col_obs = [
+infected_reference_col = [
     1, 1, 1, 1, 3, 9, 9, 13, 22, 34, 54, 65, 93, 102, 128, 196, 231, 277,
     378, 470, 491, 539, 608, 702, 798, 906, 1065, 1161, 1267, 1406, 1485,
     1579, 1780, 2054, 2223, 2473, 2709, 2776, 2852, 2979, 3105, 3233,
@@ -79,16 +111,60 @@ col_obs = [
     226373, 233541, 240795, 240795, 257101, 267385, 276055, 286020,
     295508, 306181, 317651, 327850, 334979, 345714, 357710, 367204,
     376870, 387481, 397623, 410453, 422519, 433805, 445111, 456689,
-    468332, 476660, 489122, 502178, 513719, 522138, 522138, 541139, 551688
+    468332, 476660, 489122, 502178, 513719, 522138, 522138, 541139, 551688,
 ]
 
-plt.figure()
-plt.plot(solution.t, solution.y[2], "ko-", label='SEIRV model')
-plt.plot(solution.t, col_obs, "ro-", label='Data from INS')
-plt.xlabel('Days since case 1')
-plt.ylabel('Confirmed infected people')
-plt.legend()
-plt.grid()
-plt.tight_layout()
-plt.show()
-plt.close()
+
+def seirv_model_example(
+    state_variables: List[build_model.StateVariable] = seirv_state_variables_colombia,
+    parameters: List[build_model.Parameter] = seirv_parameters_colombia,
+    t_span: List[Union[float, int]] = t_span_col,
+    t_steps: int = t_steps_col,
+    infected_reference: List[int] = infected_reference_col,
+    monitor_computation_time: bool = False,
+    plot_solution: bool = False,
+) -> Dict[str, Any]:
+    
+    # Instantiate the model 
+    model_SEIRV = build_model.ModelSEIRV(
+        state_variables=state_variables,
+        parameters=parameters,
+        t_span=t_span,
+        t_steps=t_steps
+    )
+
+    # In the next iteration of cmodel's API the user will need to define the
+    # model here manually by specifying the fluxes of each state variable using
+    # some interface such as model_SEIRV.add_flux(...)
+
+    # Run the model
+    t0 = time()
+    solution = model_SEIRV.run_model(method='RK45')
+    if monitor_computation_time:
+        print(f"Time calculating solution: {time() - t0}")
+
+    if plot_solution:
+        plt.figure()
+        plt.plot(solution.t, solution.y[2], "ko-", label='SEIRV model')
+        plt.plot(solution.t, infected_reference, "ro-", label='Data from INS')
+        plt.xlabel('Days since case 1')
+        plt.ylabel('Confirmed infected people')
+        plt.legend()
+        plt.grid()
+        plt.tight_layout()
+        plt.show()
+        plt.close()
+    
+    seirv_model_example = {
+        'model': model_SEIRV,
+        'solution': solution
+    }
+
+    return seirv_model_example
+
+
+if __name__ == "__main__":
+    seirv_model_example(
+        monitor_computation_time=True,
+        plot_solution=True
+    )
