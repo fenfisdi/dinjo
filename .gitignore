@@ -24,6 +24,7 @@
 =======
 >>>>>>> 7d0aa09... feature: added examples utilities file in /examples/cmodel_examples_utilities.py
 !cmodel_examples_utilities.py
+!optimizer_oscillator.py
 
 # (Except) even if they are in subdirectories of root
 !*/

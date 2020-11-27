@@ -1,7 +1,10 @@
 import os
 from os import stat
 import sys
+<<<<<<< HEAD
 from typing import Any, Dict, List, Union
+=======
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,21 +18,32 @@ from cmodel import  seirv_model as seirv
 from cmodel import optimizer
 
 
+<<<<<<< HEAD
 class ModelOscillator(seirv.CompartmentalModel):
     def build_model(self, t, y, w):
+=======
+class Oscillator(seirv.CompartmentalModel):
+    def build_model(self, t, y, m, k):
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
         """Harmonic Oscillator differential equations
         """
         q, p  = y
 
         # Hamilton's equations
         dydt = [
+<<<<<<< HEAD
             p,
             - (w ** 2) * q
+=======
+            p / m,
+            - k * q
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
         ]
 
         return dydt
 
 
+<<<<<<< HEAD
 def oscillator_optimizer_example(
     q0: Union[float, int] = 1.0,
     p0: Union[float, int] = 0.0,
@@ -59,18 +73,57 @@ def oscillator_optimizer_example(
     oscillator_model = ModelOscillator(
         state_variables=[q, p],
         parameters=[omega],
+=======
+if __name__ == '__main__':
+
+    # Define State Variables
+    q = seirv.StateVariable(
+        name='position', representation='q', initial_value=1.0
+    )
+    p = seirv.StateVariable(
+        name='momentum', representation='p', initial_value=0.0
+    )
+
+    # Define Paramters
+    m = seirv.Parameter(
+        name='mass', representation='m', initial_value=6.0, bounds=[5, 7]
+    )
+    k = seirv.Parameter(
+        name='force constant', representation='k', initial_value=.5, bounds=[0., 1]
+    )
+
+    t_span = [0, 2 * np.pi * (m.initial_value / k.initial_value)**0.5]
+    t_steps = 50
+
+    # Instantiate Model
+    oscillator_model = Oscillator(
+        state_variables=[q, p],
+        parameters=[m, k],
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
         t_span=t_span,
         t_steps=t_steps
     )
 
+<<<<<<< HEAD
+=======
+    # Define Model fluxes (This Will be done in the next iteration)
+
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
     # Run the model
     oscillator_solution = oscillator_model.run_model()
 
     # Build fake observation data from the solution (to test optimizer)
+<<<<<<< HEAD
     oscillator_fake_position_data = (
         oscillator_solution.y[0] 
         + (2 * np.random.random(t_steps) - 1) * fake_data_noise_factor
         )
+=======
+    noise_factor = 0.30
+    oscillator_fake_position_data = \
+        oscillator_solution.y[0] + (2 * np.random.random(t_steps) - 1) * noise_factor
+
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
 
     # Optimizer using fake noisy data
     oscillator_optimizer = optimizer.Optimizer(
@@ -81,6 +134,7 @@ def oscillator_optimizer_example(
     )
 
     # Optimize parameters
+<<<<<<< HEAD
     oscillator_parameters_optimization = \
         oscillator_optimizer.minimize_global(algorithm=minimization_algorithm)
 
@@ -89,10 +143,20 @@ def oscillator_optimizer_example(
         oscillator_optimal_solution = oscillator_model.run_model(
             parameters=oscillator_parameters_optimization.x
         )
+=======
+    parameters_optimization = \
+        oscillator_optimizer.minimize_global(algorithm='differential evolution')
+
+    # Calculate differential equation solution using optimized parameters
+    if parameters_optimization.success:
+        oscillator_optimal_solution = \
+            oscillator_model.run_model(parameters=parameters_optimization.x)
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
     else:
         oscillator_optimal_solution = None
         print("Parameter optimization did not succed.")
 
+<<<<<<< HEAD
     # Plot solution
     if plot_solution:        
         plt.figure()
@@ -138,3 +202,34 @@ def oscillator_optimizer_example(
 
 if __name__ == '__main__':
     oscillator_optimizer_example(plot_solution=True)
+=======
+
+    # Plot solution
+    plt.figure()
+    plt.plot(
+        oscillator_solution.t, oscillator_solution.y[0],
+        'k-', label='Exact Solution'
+    )
+    plt.plot(
+        oscillator_solution.t, oscillator_fake_position_data,
+        'ro', label='Noisy fake data'
+    )
+    try:
+        plt.plot(
+            oscillator_optimal_solution.t, oscillator_optimal_solution.y[0],
+            'k-*',
+            label='Optimized solution from noisy data\n'
+                + f'$m={parameters_optimization.x[0]:.3f}$,  '
+                + f'$k={parameters_optimization.x[1]:.3f}$   '
+                + f'$m/k={parameters_optimization.x[0]/parameters_optimization.x[1]:.3f}$   '
+        )
+    except:
+        pass
+    plt.xlabel('t')
+    plt.ylabel('q(t)')
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+>>>>>>> 5d07f50... feature: added Optimizer example using the harmonic oscillator.
