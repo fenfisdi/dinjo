@@ -18,6 +18,7 @@
 
 # /examples/
 !run_seirv_model_colombia.py
+!cmodel_examples_utilities.py
 
 # (Except) even if they are in subdirectories of root
 !*/
