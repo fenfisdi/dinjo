@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     # Optimize parameters
     parameters_optimization = \
-        oscillator_optimizer.minimize_global(algorithm='differential evolution')
+        oscillator_optimizer.minimize_global(algorithm='differential_evolution')
 
     # Calculate differential equation solution using optimized parameters
     if parameters_optimization.success:
