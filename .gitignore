@@ -20,12 +20,19 @@
 # /examples/
 !run_seirv_model_colombia.py
 <<<<<<< HEAD
+<<<<<<< HEAD
 !optimizer_oscillator.py
 =======
 >>>>>>> 7d0aa09... feature: added examples utilities file in /examples/cmodel_examples_utilities.py
+=======
+>>>>>>> 32639b2... feature: added Optimizer example using the harmonic oscillator.
 !cmodel_examples_utilities.py
 !optimizer_oscillator.py
 
+=======
+!optimizer_oscillator.py
+!cmodel_examples_utilities.py
+>>>>>>> ccb4a1f... feature: added Optimizer example using the harmonic oscillator.
 
 # (Except) even if they are in subdirectories of root
 !*/
