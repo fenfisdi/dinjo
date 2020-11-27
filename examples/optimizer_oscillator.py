@@ -78,8 +78,9 @@ if __name__ == '__main__':
     )
 
     # Optimize parameters
+    minimization_algorithm = 'differential_evolution'
     parameters_optimization = \
-        oscillator_optimizer.minimize_global(algorithm='differential_evolution')
+        oscillator_optimizer.minimize_global(algorithm=minimization_algorithm)
 
     # Calculate differential equation solution using optimized parameters
     if parameters_optimization.success:
@@ -101,13 +102,16 @@ if __name__ == '__main__':
         'ro', label='Noisy fake data'
     )
     try:
+        m_to_k_ratio = \
+            parameters_optimization.x[0] / parameters_optimization.x[1]
         plt.plot(
             oscillator_optimal_solution.t, oscillator_optimal_solution.y[0],
             'k-*',
             label='Optimized solution from noisy data\n'
-                + f'$m={parameters_optimization.x[0]:.3f}$,  '
-                + f'$k={parameters_optimization.x[1]:.3f}$   '
-                + f'$m/k={parameters_optimization.x[0]/parameters_optimization.x[1]:.3f}$   '
+                  f'using {minimization_algorithm} algorithm\n'
+                  f'$m={parameters_optimization.x[0]:.3f}$,  '
+                  f'$k={parameters_optimization.x[1]:.3f}$,  '
+                  f'$m/k={m_to_k_ratio:.3f}$'
         )
     except:
         pass

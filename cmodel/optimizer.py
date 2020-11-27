@@ -153,11 +153,32 @@ class Optimizer:
             param.bounds for param in self.model.parameters
         ]
 
-        minimization = minimize_algorithm(
-            func=self.cost_function,
-            bounds=bounds,
-            args=(cost_method,),
-            **algorithm_kwargs
-        )
+        try:
+            minimization = minimize_algorithm(
+                func=self.cost_function,
+                bounds=bounds,
+                args=(cost_method,),
+                **algorithm_kwargs
+            )
+        except TypeError:
+            algorithm = [
+                alg[0] for alg in minimize_global_algorithms.items() 
+                    if alg[1] is minimize_algorithm 
+            ]
+            algorithm = 'scipy.optimize.' + algorithm.pop(0)
+            raise ValueError(
+                'algorithm_kwargs value passed to minimize_global() got '
+                f'unexpected keyword arguments for {algorithm}. Check '
+                f'{algorithm} documentation for appropiate items in '
+                'algorithm_kwargs.'
+            )
+        except RuntimeError:
+            raise RuntimeError(
+                'The minimization algorithm in minimize_global() got an '
+                'internal error. Please check if the value of the kwarg '
+                'cost_method passed to minimize_global() is a valid value for '
+                'cost_method kwarg in Optimize.cost_function(). Please also '
+                'check that your model was appropiately constructed.'
+            )
 
         return  minimization
