@@ -1,10 +1,10 @@
 import os
 import sys
 from typing import List
-from _pytest.python_api import approx
 
 import pytest
-from cmodel import seirv_model
+import scipy
+import numpy as np
 
 this_dir_path = os.path.dirname(__file__)
 sys.path.append(this_dir_path)
@@ -63,8 +63,22 @@ def test_optimizer_initialization(
         )
     except AttributeError:
         assert False
+    except:
+        assert False
     else:
         assert True
+
+
+@pytest.mark.skip(
+    "Error Handling should be improved in optimizer module. "
+    "For example, AttributeError is raised inappropiately"
+)
+def test_optimizer_initialization_error_handling(
+    model_SEIRV: build_model.CompartmentalModel,
+    infected: build_model.StateVariable,
+    reference_values: List[float]
+):
+    pass
 
 
 @pytest.fixture
@@ -74,7 +88,7 @@ def seirv_optimizer(
     reference_values: List[float]
 ) ->  optimizer.Optimizer:
     """
-    docstring
+    Optimizer for seirv model.
     """
     seirv_optimizer = optimizer.Optimizer(
         model=model_SEIRV,
@@ -96,7 +110,7 @@ def test_optimizer_cost_function(
     )
     print(root_mean_square)
     # Value calculated with Boris' definition of RootMeanSquare in Mathematica script
-    assert root_mean_square == approx(6878.03, rel=0.99)
+    assert root_mean_square == pytest.approx(6878.03, rel=0.99)
 
 
 def test_optimizer_cost_function_cost_method_value_error(
@@ -104,10 +118,11 @@ def test_optimizer_cost_function_cost_method_value_error(
     model_SEIRV: build_model.CompartmentalModel
 ):
     """Test error handling in
-    :method:`cmodel.optimizer.Optimizer.cost_function`
+    :method:`cmodel.optimizer.Optimizer.cost_function` passing unsupported
+    value for cost_method kwarg to cost_function() method in optimizer class
     """
     try:
-        root_mean_square = seirv_optimizer.cost_function(
+        seirv_optimizer.cost_function(
             model_SEIRV.parameters_init_vals,
             cost_method='some_random_method'
         )
@@ -117,21 +132,159 @@ def test_optimizer_cost_function_cost_method_value_error(
         assert False
 
 
-skip_minimize_global = True
-@pytest.mark.skipif(
-    skip_minimize_global,
-    reason="This test takes several seconds to complete, run only when needed."
-)
-def test_optimizer_minimize_global(
-    seirv_optimizer: optimizer.Optimizer,
-):
-    """Test if method:`cmodel.Optimize.minimize_global` method works with
-    easiest optimization: fixed parameters via bounds.
+###############################################################################
+#       Test optimizer minimize_global with a very simple one-parameter       #
+#                       harmonic oscillator model                             #
+###############################################################################
+
+
+@pytest.fixture
+def state_variables_oscillator() -> List[build_model.StateVariable]:
+    """List of state variables for optimizator tests.
     """
-    
-    # minimization_algorithms = ['differential_evolution', 'dual_annealing', 'shgo', 'brute',]
-    minimization_algorithms = ['differential_evolution']
-    parameters_init_vals = seirv_optimizer.model.parameters_init_vals
-    for algorithm in minimization_algorithms:
-        optimization = seirv_optimizer.minimize_global(algorithm=algorithm)
-        assert optimization.x == approx(parameters_init_vals, rel=0.99)
+    q = build_model.StateVariable(
+        name='position', representation='q', initial_value=1.0
+    )
+    p = build_model.StateVariable(
+        name='momentum', representation='p', initial_value=0.0
+    )
+    return [q, p]
+
+
+@pytest.fixture
+def parameters_oscillator() -> List[build_model.Parameter]:
+    """
+    List of parameters for oscillator optimizator tests.
+    """
+    omega = build_model.Parameter(
+        name='frequency', representation='w', initial_value=5, bounds=[4, 8]
+    )
+    return [omega]
+
+
+@pytest.fixture
+def t_span_oscillator(
+    parameters_oscillator: List[build_model.Parameter]
+) -> List[float]:
+    """Time span for oscillator optimizer tests."""
+    omega = parameters_oscillator[0]
+    t_span = [0, 2 * np.pi / omega.initial_value]
+    return t_span
+
+
+@pytest.fixture
+def t_steps_oscillator() -> int:
+    """Number of time seteps for oscillator optimizer tests."""
+    t_steps = 50
+    return int(t_steps)
+
+
+@pytest.fixture
+def model_oscillator(
+    parameters_oscillator: List[build_model.Parameter],
+    state_variables_oscillator: List[build_model.StateVariable],
+    t_span_oscillator: List[float],
+    t_steps_oscillator: int
+) -> build_model.CompartmentalModel:
+    """Build  compartmental model of Harmonic Oscillator."""
+
+    # Build oscillator model
+    class ModelOscillator(build_model.CompartmentalModel):
+        def build_model(self, t, y, w):
+            """Harmonic Oscillator differential equations
+            """
+            q, p  = y
+
+            # Hamilton's equations
+            dydt = [
+                p,
+                - (w ** 2) * q
+            ]
+            return dydt
+
+    # Instantiate Model
+    model_oscillator = ModelOscillator(
+        state_variables=state_variables_oscillator,
+        parameters=parameters_oscillator,
+        t_span=t_span_oscillator,
+        t_steps=t_steps_oscillator
+    )
+
+    return model_oscillator
+
+
+@pytest.fixture
+def solution_oscillator(model_oscillator: build_model.CompartmentalModel):
+    """Numerical solution of oscillator model with initial value of
+    parameters_oscillator.
+    """
+    return model_oscillator.run_model()
+
+
+@pytest.fixture
+def fake_position_reference_values_oscillator(
+    solution_oscillator,
+    t_steps_oscillator: int
+) -> np.ndarray:
+    """Generate fake position reference values by adding noise to a numerical
+    solution.
+    """
+    # Get the position solution
+    solution_position = solution_oscillator.y[0]
+
+    # Build fake observation data from the solution (to test optimizer)
+    noise_factor = 0.15         # Keep this number less than 0.2 or some tests will fail
+    oscillator_fake_position_reference_values: np.ndarray = (
+        solution_position
+        + (2 * np.random.random(t_steps_oscillator) - 1) * noise_factor
+    )
+
+    return oscillator_fake_position_reference_values
+
+
+@pytest.fixture
+def optimizer_oscillator(
+    model_oscillator: build_model.CompartmentalModel,
+    state_variables_oscillator: List[build_model.StateVariable],
+    fake_position_reference_values_oscillator: np.ndarray,
+    solution_oscillator,
+):
+    """
+    docstring
+    """
+    position_oscillator: build_model.StateVariable = state_variables_oscillator[0]
+    optimizer_oscillator = optimizer.Optimizer(
+        model=model_oscillator,
+        reference_state_variable=position_oscillator,
+        reference_values=fake_position_reference_values_oscillator,
+        reference_t_values=solution_oscillator.t
+    )
+    return optimizer_oscillator
+
+
+def test_optimizer_minimize_global_oscillator(
+    optimizer_oscillator: optimizer.Optimizer,
+):
+    """
+    Test :method:`Optimizer.minimize_global` mehtod using harmonic Oscillator
+    example.
+    """
+
+    # Algorithms to test
+    minimize_global_algorithms = ['differential_evolution', 'shgo']
+
+    # 'dual_annealing' is very slow (approx 13 seconds for a one-parameter optimization).
+    test_dual_annealing = False
+    if test_dual_annealing:
+        minimize_global_algorithms.append('dual_annealing')
+
+    # Rune one assert statement for each algorithm
+    for algorithm in minimize_global_algorithms:
+        optimal_parameters_oscillator = optimizer_oscillator.minimize_global(
+            algorithm=algorithm
+        )
+        expected_parameters_oscillator = optimizer_oscillator.model.parameters_init_vals
+
+        assert optimal_parameters_oscillator.x == pytest.approx(
+            expected_parameters_oscillator, rel=0.9
+        )
