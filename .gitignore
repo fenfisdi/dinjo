@@ -19,23 +19,8 @@
 
 # /examples/
 !run_seirv_model_colombia.py
-<<<<<<< HEAD
-!cmodel_examples_utilities.py
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 !optimizer_oscillator.py
-=======
->>>>>>> 7d0aa09... feature: added examples utilities file in /examples/cmodel_examples_utilities.py
-=======
->>>>>>> 32639b2... feature: added Optimizer example using the harmonic oscillator.
-=======
->>>>>>> 17db5ec... fix: .gitignore
 !cmodel_examples_utilities.py
-!optimizer_oscillator.py
-
->>>>>>> feature/optimizer_JEAZ
 
 # (Except) even if they are in subdirectories of root
 !*/
