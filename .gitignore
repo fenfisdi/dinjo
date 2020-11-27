@@ -19,7 +19,11 @@
 
 # /examples/
 !run_seirv_model_colombia.py
+<<<<<<< HEAD
 !optimizer_oscillator.py
+=======
+!cmodel_examples_utilities.py
+>>>>>>> 7d0aa09... feature: added examples utilities file in /examples/cmodel_examples_utilities.py
 
 # (Except) even if they are in subdirectories of root
 !*/
