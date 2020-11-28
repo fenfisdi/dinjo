@@ -1,26 +1,12 @@
-# ignore everything
-*
-
-# Except
-
-# /
-!*.md
-!.gitignore
-!Pipfile*
+# Hidden folders
+/.vscode
+/.pytest_cache
+*__pycache__/
 
 # /cmodel/
-!__init__.py
-!seirv_model.py
-!optimizer.py
-
-# /tests/
-!test_seirv_model.py
-!test_optimizer.py
+/cmodel/build_model.py
 
 # /examples/
-!run_seirv_model_colombia.py
-!optimizer_oscillator.py
-!cmodel_examples_utilities.py
+/examples/diff_evol_wrapper.py
 
-# (Except) even if they are in subdirectories of root
-!*/
+# /tests/
