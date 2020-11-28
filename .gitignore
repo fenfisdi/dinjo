@@ -10,3 +10,7 @@
 /examples/diff_evol_wrapper.py
 
 # /tests/
+
+# General
+*.pickle
+*.txt
