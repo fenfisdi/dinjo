@@ -1,7 +1,7 @@
 import os
-from os import stat
 import sys
 from typing import Any, Dict, List, Union
+import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,6 +39,7 @@ def oscillator_optimizer_example(
     t_steps: int = 50,
     fake_data_noise_factor: float = 0.30,
     minimization_algorithm: str = 'differential_evolution',
+    save_optimization_results_pickle: bool = False,
     plot_solution: bool = False
 ) -> Dict[str, Any]:
 
@@ -68,7 +69,7 @@ def oscillator_optimizer_example(
 
     # Build fake observation data from the solution (to test optimizer)
     oscillator_fake_position_data = (
-        oscillator_solution.y[0] 
+        oscillator_solution.y[0]
         + (2 * np.random.random(t_steps) - 1) * fake_data_noise_factor
         )
 
@@ -84,6 +85,28 @@ def oscillator_optimizer_example(
     oscillator_parameters_optimization = \
         oscillator_optimizer.minimize_global(algorithm=minimization_algorithm)
 
+    # Save pickle
+    if save_optimization_results_pickle:
+        pickle_directory_path = os.path.join(
+            this_file_dir,
+            'generated_files'
+        )
+        pickle_path = os.path.join(
+            pickle_directory_path,
+            'oscillator_parameters_optimization.pickle'
+        )
+        if not os.path.isdir(pickle_directory_path):
+            try:
+                os.mkdir(pickle_directory_path)
+            except OSError:
+                print("Creation of the directory %s failed" % pickle_directory_path)
+            else:
+                print("Successfully created the directory %s " % pickle_directory_path)
+        pickle.dump(
+            oscillator_parameters_optimization,
+            open(pickle_path, 'wb')
+        )
+
     # Calculate differential equation solution using optimized parameters
     if oscillator_parameters_optimization.success:
         oscillator_optimal_solution = oscillator_model.run_model(
@@ -94,7 +117,7 @@ def oscillator_optimizer_example(
         print("Parameter optimization did not succed.")
 
     # Plot solution
-    if plot_solution:        
+    if plot_solution:
         plt.figure()
         plt.plot(
             oscillator_solution.t, oscillator_solution.y[0],
@@ -137,4 +160,7 @@ def oscillator_optimizer_example(
 
 
 if __name__ == '__main__':
-    oscillator_optimizer_example(plot_solution=True)
+    oscillator_optimizer_example(
+        plot_solution=True,
+        save_optimization_results_pickle=True
+    )
