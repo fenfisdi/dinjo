@@ -60,8 +60,9 @@ c3_opt = 0.159107
 xi1 = 2.3
 b1, b2, b3 = 1.5 * 3.11e-9, 1.5 * 0.62e-9, 1.5 * 1.03e-9
 
-# Bounds of c parameters used in Boris' Mathematica script
-c_bounds = (0, 1)
+# Bounds of c and xi2 parameters used in Boris' Mathematica script
+c_bounds = [0, 1]
+xi2_bounds = [0, 10]
 
 # param_range_width used in Boris' Mathematica script
 param_range_width = 3
@@ -69,14 +70,14 @@ param_range_width = 3
 # Each element of the list refers to a parameter
 # (name, representation, initial_value, bounds)
 seirv_parameters_colombia_src = [
-    ("Lambda", "Lambda", Lambda, (Lambda, Lambda)),
-    ("mu", "mu", mu, (mu, mu)),
-    ("alpha", "alpha", alpha, (alpha, alpha)),
-    ("omega", "omega", omega, (omega, omega)),
-    ("gamma", "gamma", gamma, (gamma, gamma)),
+    ("Lambda", "Lambda", Lambda, [Lambda, Lambda]),
+    ("mu", "mu", mu, [mu, mu]),
+    ("alpha", "alpha", alpha, [alpha, alpha]),
+    ("omega", "omega", omega, [omega, omega]),
+    ("gamma", "gamma", gamma, [gamma, gamma]),
     ("xi1", "xi1", xi1_opt, param_sample_range(xi1, param_range_width)),
-    ("xi2", "xi2", xi2, (0, 10)),
-    ("sigma", "sigma", sigma, (sigma, sigma)),
+    ("xi2", "xi2", xi2, xi2_bounds),
+    ("sigma", "sigma", sigma, [sigma, sigma]),
     ("b1", "b1", b1_opt, param_sample_range(b1, param_range_width)),
     ("b2", "b2", b2_opt, param_sample_range(b2, param_range_width)),
     ("b3", "b3", b3_opt, param_sample_range(b3, param_range_width)),
@@ -84,11 +85,22 @@ seirv_parameters_colombia_src = [
     ("c2", "c2", c2_opt, c_bounds),
     ("c3", "c3", c3_opt, c_bounds),
 ]
+seirv_parameters_colombia_src = [
+    {
+        'name': param_info[0],
+        'representation': param_info[1],
+        'initial_value': param_info[2],
+        'bounds': param_info[3]
+    }
+    for param_info in seirv_parameters_colombia_src
+]
 
 # List of instances of parameters
-seirv_parameters_colombia = [
-    build_model.Parameter(*param) for param in seirv_parameters_colombia_src
-]
+seirv_parameters_colombia = []
+for param_info in seirv_parameters_colombia_src:
+    seirv_parameters_colombia.append(
+        build_model.Parameter(**param_info)
+    )
 
 # Time span and time steps in days
 t_span_col = [0, 171]

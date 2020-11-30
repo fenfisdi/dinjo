@@ -23,4 +23,4 @@ def param_sample_range(
     if param < 0 or param_range_width < 0:
         raise ValueError(error_message)
 
-    return (param / param_range_width, param * param_range_width)
+    return [param / param_range_width, param * param_range_width]
