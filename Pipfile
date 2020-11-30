@@ -10,6 +10,7 @@ matplotlib = "*"
 
 [dev-packages]
 pytest = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.9"
