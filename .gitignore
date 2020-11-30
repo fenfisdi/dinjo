@@ -8,10 +8,10 @@
 
 # /examples/
 /examples/diff_evol_wrapper.py
-/examples/experiments/
 
 # /tests/
 
 # General
 *.pickle
 *.txt
+*experiment*
