@@ -16,3 +16,4 @@
 *.txt
 *.csv
 *experiment*
+*.pyc
