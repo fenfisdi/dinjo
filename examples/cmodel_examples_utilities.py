@@ -47,7 +47,6 @@ def setup_csv(
         )
 
     if os.path.isfile(file_complete_path):
-        print(f"setup_csv(): file {file_complete_path} already exists.")
         return None
 
     if first_row:
@@ -61,3 +60,4 @@ def setup_csv(
             csv_writer = csv.writer(file)
             csv_writer.writerow(first_row)
 
+    return True
