@@ -7,6 +7,9 @@ from time import time
 from typing import Any, Dict
 
 import matplotlib.pyplot as plt
+import pandas as pd
+
+from cmodel_examples_utilities import setup_csv
 
 # Add project root and this file's directories to path in order to find cmodel
 # package
@@ -96,10 +99,44 @@ def optimizer_seirv_model_colombia_example(
                     f"{generated_files_directory_path}"
                 )
 
-        # Save txt log
-        with open(file_base_path + '.txt', 'w') as file:
-            file.write(optimization_log)
+        csv_file_path = file_base_path + '.csv'
         
+        # Create CSV file with proper column names if one does not exist
+        param_names = [
+            param.name for param in optimizer_seirv_model_colombia.model.parameters
+        ]
+        csv_column_names = [
+            'index',
+            'comp_time', 'algorithm',
+            'success', 'optimizer_message', 'fun', 'nfev', 'nit',
+            *param_names
+        ]
+        setup_csv(csv_file_path, first_row=csv_column_names)
+        
+        # Organize optimal parameters in dictionary
+        optimal_parameters_dict = {}
+        for i, param_opt_value in enumerate(seirv_colombia_parameters_optimization.x):
+            optimal_parameters_dict[param_names[i]] = param_opt_value
+
+        # Add optimal parameters to the CSV file using pandas
+        df_optimization_log = pd.read_csv(
+            csv_file_path, index_col=csv_column_names[0]
+        )
+        optimization_csv_row = {
+            csv_column_names[1]: computation_time,
+            csv_column_names[2]: minimization_algorithm,
+            csv_column_names[3]: seirv_colombia_parameters_optimization.success,
+            csv_column_names[4]: seirv_colombia_parameters_optimization.message,
+            csv_column_names[5]: seirv_colombia_parameters_optimization.fun,
+            csv_column_names[6]: seirv_colombia_parameters_optimization.nfev,
+            csv_column_names[7]: seirv_colombia_parameters_optimization.nit,
+            **optimal_parameters_dict
+        }
+        df_optimization_log = df_optimization_log.append(
+            optimization_csv_row, ignore_index=True
+        )
+        df_optimization_log.to_csv(csv_file_path, index_label=csv_column_names[0])
+
         # Save pickle
         pickle.dump(
             seirv_colombia_parameters_optimization,
