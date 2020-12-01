@@ -12,6 +12,6 @@ setuptools.setup(
     author='Juan Esteban Aristizabal Zuluaga',
     author_email='jeaz.git@gmail.com',
     license='gplv3',
-    packages=setuptools.find_packages(),
+    packages=['cmodel'],
     zip_safe=False
-    )
+)
