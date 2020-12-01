@@ -2,6 +2,7 @@
 # This script may take some hours to execute
 import sys
 import os
+import csv
 import pickle
 from time import time
 from typing import Any, Dict
@@ -49,6 +50,7 @@ def optimizer_seirv_model_colombia_example(
         )
     computation_time = time() - t0
 
+    # Construct log message
     optimization_log = (
         '=============================================\n'
         + 'SEIRV Model Colombia Parematers Optimization:\n'
@@ -56,21 +58,23 @@ def optimizer_seirv_model_colombia_example(
         + f'Computation time: {computation_time}\n'
         + '=============================================\n'
         + str(seirv_colombia_parameters_optimization)
+        + '\n\nParam \tOptimized \tExpected\n'
+        + '--------------------------------------\n'
     )
-
+    
+    optimal_solution_mathematica = \
+        optimizer_seirv_model_colombia.model.parameters_init_vals
+    parameters = optimizer_seirv_model_colombia.model.parameters
+    
+    for i, param in enumerate(seirv_colombia_parameters_optimization.x):
+        optimization_log += (
+            f"{parameters[i].representation}\t"
+            f"{param:.4e}\t"
+            f"{optimal_solution_mathematica[i]:.4e}\n"
+        )
+    
     if print_optimization_log:
         print(optimization_log)
-        print("\nParam \tOptimized \tExpected")
-        print("--------------------------------------")
-        optimal_solution_mathematica = \
-            optimizer_seirv_model_colombia.model.parameters_init_vals
-        parameters = optimizer_seirv_model_colombia.model.parameters
-        for i, param in enumerate(seirv_colombia_parameters_optimization.x):
-            print(
-                f"{parameters[i].representation}\t"
-                f"{param:.4e}\t"
-                f"{optimal_solution_mathematica[i]:.4e}"
-            )
 
     if save_optimization_results:
         # Directory name (full path). Created in the same folder as this file.
