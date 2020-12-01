@@ -2,7 +2,6 @@
 # This script may take some hours to execute
 import sys
 import os
-import csv
 import pickle
 from time import time
 from typing import Any, Dict
@@ -26,6 +25,13 @@ from seirv_model_colombia import (
 
 def optimizer_seirv_model_colombia_example(
     minimization_algorithm: str = 'differential_evolution',
+    algorithm_kwargs={
+        'popsize': 20,
+        'disp': True,
+        'tol': 0.001,
+        'maxiter': 100,
+        'mutation': [0.3,0.7]
+    },
     print_optimization_log: bool = False,
     save_optimization_results: bool = False,
     generated_files_directory_name: str = 'generated_files',
@@ -46,7 +52,8 @@ def optimizer_seirv_model_colombia_example(
     seirv_colombia_parameters_optimization = \
         optimizer_seirv_model_colombia.minimize_global(
             cost_method='root_mean_square',
-            algorithm=minimization_algorithm
+            algorithm=minimization_algorithm,
+            algorithm_kwargs=algorithm_kwargs
         )
     computation_time = time() - t0
 
