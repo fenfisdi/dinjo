@@ -30,7 +30,7 @@ def optimizer_seirv_model_colombia_example(
         'disp': True,
         'tol': 0.001,
         'maxiter': 100,
-        'mutation': [0.3,0.7]
+        'mutation': [0.3, 0.7],
     },
     print_optimization_log: bool = False,
     save_optimization_results: bool = False,
