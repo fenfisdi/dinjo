@@ -4,7 +4,7 @@
 *__pycache__/
 
 # /cmodel/
-/cmodel/build_model.py
+/cmodel/_build_model.py
 
 # /examples/
 /examples/diff_evol_wrapper.py
