@@ -1,11 +1,10 @@
-from cmodel import seirv_model
 from typing import List
 
 import pytest
 from pytest import approx
 import numpy as np
 
-from cmodel import seirv_model as seirv
+from cmodel import model
 
 @pytest.fixture
 def state_variables_source():
@@ -22,7 +21,7 @@ def state_variables_source():
 @pytest.fixture
 def state_variables(state_variables_source):
     state_variables = [
-        seirv.StateVariable(*sv) for sv in state_variables_source
+        model.StateVariable(*sv) for sv in state_variables_source
     ]
 
     return state_variables
@@ -54,7 +53,7 @@ def parameters(parameters_source):
     """The values of the parameters were obtained from Boris' optimization
     script.
     """
-    parameters = [seirv.Parameter(*param) for param in parameters_source]
+    parameters = [model.Parameter(*param) for param in parameters_source]
 
     return parameters
 
@@ -64,20 +63,20 @@ def model_SEIRV(state_variables, parameters):
     t_span = [0, 171]
     t_steps = 172
 
-    model_SEIRV = seirv.ModelSEIRV(state_variables, parameters, t_span, t_steps)
+    model_SEIRV = model.ModelSEIRV(state_variables, parameters, t_span, t_steps)
     
     return model_SEIRV
 
 
 def test_state_variables_init_vals(
-    model_SEIRV: seirv.ModelSEIRV,
+    model_SEIRV: model.ModelSEIRV,
     state_variables_source
 ):
     sv_init_vals = [sv[2] for sv in state_variables_source]
     assert model_SEIRV.state_variables_init_vals == sv_init_vals
 
 
-def test_parameters_init_vals(model_SEIRV: seirv.ModelSEIRV, parameters_source):
+def test_parameters_init_vals(model_SEIRV: model.ModelSEIRV, parameters_source):
     params = [param[2] for param in parameters_source]
     assert model_SEIRV.parameters_init_vals == params
 
@@ -93,7 +92,7 @@ def test_parameters_init_vals(model_SEIRV: seirv.ModelSEIRV, parameters_source):
 )
 def test_parameters_bounds(bounds):
     try:
-        seirv.Parameter("a", "b", 1.5, bounds=bounds)
+        model.Parameter("a", "b", 1.5, bounds=bounds)
     except AttributeError:
         assert False
     else:
@@ -114,11 +113,11 @@ def test_parameters_bounds(bounds):
 )
 def test_parameters_bounds_error_handling(initial_value, bounds):
     with pytest.raises(AttributeError):
-        seirv.Parameter("a", "b", initial_value, bounds=bounds)
+        model.Parameter("a", "b", initial_value, bounds=bounds)
 
 
 def test_state_variables_initialization(
-    state_variables: List[seirv.StateVariable], state_variables_source
+    state_variables: List[model.StateVariable], state_variables_source
 ):
     state_variables_source_test = [
         (sv.name, sv.representation, sv.initial_value) for sv in state_variables
@@ -128,7 +127,7 @@ def test_state_variables_initialization(
 
 
 def test_parameters_initialization(
-    parameters: List[seirv.Parameter], parameters_source
+    parameters: List[model.Parameter], parameters_source
 ):
     parameters_source_test = [
         (param.name, param.representation, param.initial_value) for param in parameters
@@ -138,9 +137,9 @@ def test_parameters_initialization(
 
 
 def test_model_SEIRV_build_model(
-    model_SEIRV: seirv.ModelSEIRV,
-    state_variables: List[seirv.StateVariable],
-    parameters: List[seirv.Parameter]
+    model_SEIRV: model.ModelSEIRV,
+    state_variables: List[model.StateVariable],
+    parameters: List[model.Parameter]
 ):
     """Tests if evaluation of differential equation defined in SEIRV model is OK"""
 
@@ -161,8 +160,8 @@ def test_model_SEIRV_build_model(
 
 
 def test_model_SEIRV_run_model_initial_value(
-    model_SEIRV: seirv.ModelSEIRV,
-    state_variables: List[seirv.StateVariable]
+    model_SEIRV: model.ModelSEIRV,
+    state_variables: List[model.StateVariable]
 ):
     initial_state_variables = model_SEIRV.state_variables_init_vals
     param_types = (list, tuple, np.array)

@@ -6,13 +6,13 @@ import math
 import numpy as np
 import scipy.optimize as opt
 
-from . import seirv_model as build_model
+from . import model
 
 class Optimizer:
     def __init__(
         self,
-        model: build_model.CompartmentalModel,
-        reference_state_variable: build_model.StateVariable,
+        model: model.CompartmentalModel,
+        reference_state_variable: model.StateVariable,
         reference_values: List[float],
         reference_t_values: List[float],
         integration_method: str = 'RK45',

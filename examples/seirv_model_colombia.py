@@ -12,7 +12,7 @@ project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
-import cmodel.seirv_model as build_model
+from cmodel import model
 from cmodel_examples_utilities import param_sample_range
 
 
@@ -34,7 +34,7 @@ seirv_state_variables_colombia_src = [
 
 # List of instances of state variables
 seirv_state_variables_colombia = [
-    build_model.StateVariable(*sv) for sv in seirv_state_variables_colombia_src
+    model.StateVariable(*sv) for sv in seirv_state_variables_colombia_src
 ]
 
 # Parameters not variated by Boris' Mathematica script
@@ -99,7 +99,7 @@ seirv_parameters_colombia_src = [
 seirv_parameters_colombia = []
 for param_info in seirv_parameters_colombia_src:
     seirv_parameters_colombia.append(
-        build_model.Parameter(**param_info)
+        model.Parameter(**param_info)
     )
 
 # Time span and time steps in days
@@ -128,8 +128,8 @@ infected_reference_col = [
 
 
 def seirv_model_example(
-    state_variables: List[build_model.StateVariable] = seirv_state_variables_colombia,
-    parameters: List[build_model.Parameter] = seirv_parameters_colombia,
+    state_variables: List[model.StateVariable] = seirv_state_variables_colombia,
+    parameters: List[model.Parameter] = seirv_parameters_colombia,
     t_span: List[Union[float, int]] = t_span_col,
     t_steps: int = t_steps_col,
     infected_reference: List[int] = infected_reference_col,
@@ -138,7 +138,7 @@ def seirv_model_example(
 ) -> Dict[str, Any]:
     
     # Instantiate the model 
-    model_SEIRV = build_model.ModelSEIRV(
+    model_SEIRV = model.ModelSEIRV(
         state_variables=state_variables,
         parameters=parameters,
         t_span=t_span,

@@ -9,7 +9,7 @@ import numpy as np
 this_dir_path = os.path.dirname(__file__)
 sys.path.append(this_dir_path)
 
-import cmodel.seirv_model as build_model
+from cmodel import model
 import cmodel.optimizer as optimizer
 from test_seirv_model import (
     state_variables_source, state_variables, parameters_source, parameters,
@@ -18,7 +18,7 @@ from test_seirv_model import (
 
 
 @pytest.fixture
-def infected(state_variables: build_model.StateVariable):
+def infected(state_variables: model.StateVariable):
     infected = state_variables[2]
     return infected
 
@@ -50,8 +50,8 @@ def reference_values():
 
 
 def test_optimizer_initialization(
-    model_SEIRV: build_model.CompartmentalModel,
-    infected: build_model.StateVariable,
+    model_SEIRV: model.CompartmentalModel,
+    infected: model.StateVariable,
     reference_values: List[float]
 ):
     try:
@@ -74,8 +74,8 @@ def test_optimizer_initialization(
     "For example, AttributeError is raised inappropiately"
 )
 def test_optimizer_initialization_error_handling(
-    model_SEIRV: build_model.CompartmentalModel,
-    infected: build_model.StateVariable,
+    model_SEIRV: model.CompartmentalModel,
+    infected: model.StateVariable,
     reference_values: List[float]
 ):
     pass
@@ -83,8 +83,8 @@ def test_optimizer_initialization_error_handling(
 
 @pytest.fixture
 def seirv_optimizer(
-    model_SEIRV: build_model.CompartmentalModel,
-    infected: build_model.StateVariable,
+    model_SEIRV: model.CompartmentalModel,
+    infected: model.StateVariable,
     reference_values: List[float]
 ) ->  optimizer.Optimizer:
     """
@@ -102,7 +102,7 @@ def seirv_optimizer(
 
 def test_optimizer_cost_function(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: build_model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel
 ):
 
     root_mean_square = seirv_optimizer.cost_function(
@@ -115,7 +115,7 @@ def test_optimizer_cost_function(
 
 def test_optimizer_cost_function_cost_method_value_error(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: build_model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel
 ):
     """Test error handling in
     :method:`cmodel.optimizer.Optimizer.cost_function` passing unsupported
@@ -139,24 +139,24 @@ def test_optimizer_cost_function_cost_method_value_error(
 
 
 @pytest.fixture
-def state_variables_oscillator() -> List[build_model.StateVariable]:
+def state_variables_oscillator() -> List[model.StateVariable]:
     """List of state variables for optimizator tests.
     """
-    q = build_model.StateVariable(
+    q = model.StateVariable(
         name='position', representation='q', initial_value=1.0
     )
-    p = build_model.StateVariable(
+    p = model.StateVariable(
         name='momentum', representation='p', initial_value=0.0
     )
     return [q, p]
 
 
 @pytest.fixture
-def parameters_oscillator() -> List[build_model.Parameter]:
+def parameters_oscillator() -> List[model.Parameter]:
     """
     List of parameters for oscillator optimizator tests.
     """
-    omega = build_model.Parameter(
+    omega = model.Parameter(
         name='frequency', representation='w', initial_value=5, bounds=[4, 8]
     )
     return [omega]
@@ -164,7 +164,7 @@ def parameters_oscillator() -> List[build_model.Parameter]:
 
 @pytest.fixture
 def t_span_oscillator(
-    parameters_oscillator: List[build_model.Parameter]
+    parameters_oscillator: List[model.Parameter]
 ) -> List[float]:
     """Time span for oscillator optimizer tests."""
     omega = parameters_oscillator[0]
@@ -181,15 +181,15 @@ def t_steps_oscillator() -> int:
 
 @pytest.fixture
 def model_oscillator(
-    parameters_oscillator: List[build_model.Parameter],
-    state_variables_oscillator: List[build_model.StateVariable],
+    parameters_oscillator: List[model.Parameter],
+    state_variables_oscillator: List[model.StateVariable],
     t_span_oscillator: List[float],
     t_steps_oscillator: int
-) -> build_model.CompartmentalModel:
+) -> model.CompartmentalModel:
     """Build  compartmental model of Harmonic Oscillator."""
 
     # Build oscillator model
-    class ModelOscillator(build_model.CompartmentalModel):
+    class ModelOscillator(model.CompartmentalModel):
         def build_model(self, t, y, w):
             """Harmonic Oscillator differential equations
             """
@@ -214,7 +214,7 @@ def model_oscillator(
 
 
 @pytest.fixture
-def solution_oscillator(model_oscillator: build_model.CompartmentalModel):
+def solution_oscillator(model_oscillator: model.CompartmentalModel):
     """Numerical solution of oscillator model with initial value of
     parameters_oscillator.
     """
@@ -244,15 +244,15 @@ def fake_position_reference_values_oscillator(
 
 @pytest.fixture
 def optimizer_oscillator(
-    model_oscillator: build_model.CompartmentalModel,
-    state_variables_oscillator: List[build_model.StateVariable],
+    model_oscillator: model.CompartmentalModel,
+    state_variables_oscillator: List[model.StateVariable],
     fake_position_reference_values_oscillator: np.ndarray,
     solution_oscillator,
 ):
     """
     docstring
     """
-    position_oscillator: build_model.StateVariable = state_variables_oscillator[0]
+    position_oscillator: model.StateVariable = state_variables_oscillator[0]
     optimizer_oscillator = optimizer.Optimizer(
         model=model_oscillator,
         reference_state_variable=position_oscillator,

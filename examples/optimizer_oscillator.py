@@ -11,11 +11,11 @@ this_file_dir = os.path.dirname(__file__)
 project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(project_root_dir)
 
-from cmodel import  seirv_model as seirv
+from cmodel import model
 from cmodel import optimizer
 
 
-class ModelOscillator(seirv.CompartmentalModel):
+class ModelOscillator(model.CompartmentalModel):
     def build_model(self, t, y, w):
         """Harmonic Oscillator differential equations
         """
@@ -44,15 +44,15 @@ def oscillator_optimizer_example(
 ) -> Dict[str, Any]:
 
     # Define State Variables
-    q = seirv.StateVariable(
+    q = model.StateVariable(
         name='position', representation='q', initial_value=q0
     )
-    p = seirv.StateVariable(
+    p = model.StateVariable(
         name='momentum', representation='p', initial_value=p0
     )
 
     # Define Paramters
-    omega = seirv.Parameter(
+    omega = model.Parameter(
         name='frequency', representation='w', initial_value=w0, bounds=w_bounds
     )
 
