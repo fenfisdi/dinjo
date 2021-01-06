@@ -12,7 +12,7 @@ project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
-from cmodel import model
+from cmodel import model, predefined
 from cmodel_examples_utilities import param_sample_range
 
 
@@ -138,7 +138,7 @@ def seirv_model_example(
 ) -> Dict[str, Any]:
     
     # Instantiate the model 
-    model_SEIRV = model.ModelSEIRV(
+    model_SEIRV = predefined.ModelSEIRV(
         state_variables=state_variables,
         parameters=parameters,
         t_span=t_span,

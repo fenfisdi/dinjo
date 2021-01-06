@@ -3,7 +3,6 @@ import sys
 from typing import List
 
 import pytest
-import scipy
 import numpy as np
 
 this_dir_path = os.path.dirname(__file__)
