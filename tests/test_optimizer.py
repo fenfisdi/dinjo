@@ -1,16 +1,10 @@
-import os
-import sys
 from typing import List
 
 import pytest
 import numpy as np
 
-this_dir_path = os.path.dirname(__file__)
-sys.path.append(this_dir_path)
-
-from cmodel import model
-import cmodel.optimizer as optimizer
-from test_seirv_model import (
+from cmodel import model, optimizer
+from .test_seirv_model import (
     state_variables_source, state_variables, parameters_source, parameters,
     model_SEIRV,
 )
