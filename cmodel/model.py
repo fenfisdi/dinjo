@@ -2,7 +2,6 @@ import numbers
 from typing import List, Optional
 
 import numpy as np
-from numpy.lib.arraysetops import isin
 from scipy.integrate import solve_ivp
 
 
