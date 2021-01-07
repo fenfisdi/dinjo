@@ -97,7 +97,7 @@ class CompartmentalModel:
         return self._get_variable_init_vals(self.parameters)
 
     def build_model(self, t, y, *args):
-        pass
+        raise NotImplementedError
 
     def run_model(
         self,
