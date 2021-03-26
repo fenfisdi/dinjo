@@ -27,18 +27,18 @@ class Parameter(Variable):
     ) -> None:
         super().__init__(name, representation, initial_value)
         self.bounds = bounds if bounds else [initial_value, initial_value]
-    
+
     @property
     def bounds(self):
         """Bounds of the parameters. Needed for optimization.
         """
         return self._bounds
-    
+
     @bounds.setter
     def bounds(self, bounds_input):
         attr_err_message = "bounds must be a list of two increasing numbers."
         init_val_not_in_bounds_range = "initial_value must be in the range defined by bounds."
-       
+
         type_check: bool = (
             isinstance(bounds_input, list)
             and len(bounds_input) == 2
@@ -50,16 +50,16 @@ class Parameter(Variable):
             raise AttributeError(attr_err_message)
 
         order_check: bool = bounds_input[0] <= bounds_input[1]
-        
+
         if not order_check:
             raise AttributeError(attr_err_message)
 
         if not (
-            bounds_input[0] <= self.initial_value 
+            bounds_input[0] <= self.initial_value
             and bounds_input[1] >= self.initial_value
         ):
             raise AttributeError(init_val_not_in_bounds_range)
-        
+
         self._bounds = bounds_input
 
 
@@ -70,14 +70,14 @@ class CompartmentalModel:
         parameters: List[Parameter],
         t_span: List[float] = [0, 10],
         t_steps: int = 50,
-        t_eval: List[float] = None
+        t_eval: Optional[List[float]] = None
     ) -> None:
         self.state_variables = state_variables
         self.parameters = parameters
         self.t_span = t_span
         self.t_steps = t_steps
         self.t_eval = t_eval if t_eval else list(np.linspace(*t_span, t_steps))
-    
+
     def _get_variable_init_vals(
         self, variables: List[Variable]
     ) -> List[float]:
@@ -101,20 +101,20 @@ class CompartmentalModel:
     def run_model(
         self,
         parameters: List[float] = None,
-        method:str = 'RK45'
+        method: str = 'RK45'
     ):
         """Integrate model using ``scipy.integrate.solve_ivp``"""
-        
+
         parameters = (
             parameters if parameters is not None else self.parameters_init_vals
         )
 
         parameters_permitted_types = (list, tuple, np.ndarray)
         parameters_type_is_permitted = True
-        
+
         for permitted_type in parameters_permitted_types:
             parameters_type_is_permitted += isinstance(parameters, permitted_type)
-        
+
         if not parameters_type_is_permitted:
             raise TypeError(
                 "parameters must be a list, tuple or numpy.ndarray"

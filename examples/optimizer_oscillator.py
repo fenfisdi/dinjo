@@ -19,7 +19,7 @@ class ModelOscillator(model.CompartmentalModel):
     def build_model(self, t, y, w):
         """Harmonic Oscillator differential equations
         """
-        q, p  = y
+        q, p = y
 
         # Hamilton's equations
         dydt = [
@@ -33,7 +33,7 @@ class ModelOscillator(model.CompartmentalModel):
 def oscillator_optimizer_example(
     q0: Union[float, int] = 1.0,
     p0: Union[float, int] = 0.0,
-    w0: Union[float, int]  = 2 * np.pi,
+    w0: Union[float, int] = 2 * np.pi,
     w_bounds: List[Union[float, int]] = [4, 8],
     t_span: List[Union[float, int]] = [0, 1],
     t_steps: int = 50,
@@ -71,7 +71,7 @@ def oscillator_optimizer_example(
     oscillator_fake_position_data = (
         oscillator_solution.y[0]
         + (2 * np.random.random(t_steps) - 1) * fake_data_noise_factor
-        )
+    )
 
     # Optimizer using fake noisy data
     oscillator_optimizer = optimizer.Optimizer(
@@ -123,7 +123,7 @@ def oscillator_optimizer_example(
             oscillator_solution.t, oscillator_solution.y[0],
             'k-',
             label='Exact Solution using '
-                f'$\omega={omega.initial_value:.3f}$'
+                  f'$\omega={omega.initial_value:.3f}$'
         )
         plt.plot(
             oscillator_solution.t, oscillator_fake_position_data,
@@ -134,10 +134,10 @@ def oscillator_optimizer_example(
                 oscillator_optimal_solution.t, oscillator_optimal_solution.y[0],
                 'k-*',
                 label='Optimized solution from noisy data\n'
-                    f'using {minimization_algorithm} algorithm\n'
-                    f'$\omega={oscillator_parameters_optimization.x[0]:.3f}$'
+                      f'using {minimization_algorithm} algorithm\n'
+                      f'$\omega={oscillator_parameters_optimization.x[0]:.3f}$'
             )
-        except:
+        except Exception:
             pass
         plt.xlabel('t')
         plt.ylabel('q(t)')
