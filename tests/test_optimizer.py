@@ -12,7 +12,7 @@ from .test_seirv_model import (
 
 @pytest.fixture
 def infected(state_variables: model.StateVariable):
-    infected = state_variables[2]
+    infected: model.StateVariable = state_variables[2]
     return infected
 
 
@@ -56,7 +56,7 @@ def test_optimizer_initialization(
         )
     except AttributeError:
         assert False
-    except:
+    except Exception:
         assert False
     else:
         assert True
@@ -71,7 +71,7 @@ def test_optimizer_initialization_error_handling(
     infected: model.StateVariable,
     reference_values: List[float]
 ):
-    pass
+    raise NotImplementedError
 
 
 @pytest.fixture
@@ -79,7 +79,7 @@ def seirv_optimizer(
     model_SEIRV: model.CompartmentalModel,
     infected: model.StateVariable,
     reference_values: List[float]
-) ->  optimizer.Optimizer:
+) -> optimizer.Optimizer:
     """
     Optimizer for seirv model.
     """
@@ -186,7 +186,7 @@ def model_oscillator(
         def build_model(self, t, y, w):
             """Harmonic Oscillator differential equations
             """
-            q, p  = y
+            q, p = y
 
             # Hamilton's equations
             dydt = [
@@ -257,6 +257,7 @@ def optimizer_oscillator(
 
 def test_optimizer_minimize_global_oscillator(
     optimizer_oscillator: optimizer.Optimizer,
+    test_dual_annealing: bool = False
 ):
     """
     Test :method:`Optimizer.minimize_global` mehtod using harmonic Oscillator
@@ -267,7 +268,6 @@ def test_optimizer_minimize_global_oscillator(
     minimize_global_algorithms = ['differential_evolution', 'shgo']
 
     # 'dual_annealing' is very slow (approx 13 seconds for a one-parameter optimization).
-    test_dual_annealing = False
     if test_dual_annealing:
         minimize_global_algorithms.append('dual_annealing')
 

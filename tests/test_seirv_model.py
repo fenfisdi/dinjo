@@ -19,6 +19,7 @@ def state_variables_source():
 
     return state_variables_source
 
+
 @pytest.fixture
 def state_variables(state_variables_source):
     state_variables = [
@@ -65,7 +66,7 @@ def model_SEIRV(state_variables, parameters):
     t_steps = 172
 
     model_SEIRV = predefined.ModelSEIRV(state_variables, parameters, t_span, t_steps)
-    
+
     return model_SEIRV
 
 
@@ -150,7 +151,7 @@ def test_model_SEIRV_build_model(
     # Expected value calculated in Mathematica, in Boris' script
     expected_diff_eqn_value = approx(
         [1324.04, 0.134732, -0.0780818, 0.0666667, 6.32609], rel=0.99
-    ) 
+    )
 
     # Evaluation of differential equation must be independent of time
     for t in range(10):

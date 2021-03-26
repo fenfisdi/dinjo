@@ -49,11 +49,10 @@ def setup_csv(
     if os.path.isfile(file_complete_path):
         return None
 
-    if first_row:
-        if not isinstance(first_row, list) or isinstance(first_row, tuple):
-            raise TypeError(
-                'setup_csv(): first_row kwarg must be a list or a tuple.'
-            )
+    if first_row and (not isinstance(first_row, list) or isinstance(first_row, tuple)):
+        raise TypeError(
+            'setup_csv(): first_row kwarg must be a list or a tuple.'
+        )
 
     with open(file_complete_path, 'w', newline='') as file:
         if first_row:

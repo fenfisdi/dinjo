@@ -7,6 +7,7 @@ import scipy.optimize as opt
 
 from . import model
 
+
 class Optimizer:
     def __init__(
         self,
@@ -26,7 +27,7 @@ class Optimizer:
         self.integration_method = integration_method
 
         # Index of reference state variable in state variable list
-        try:    
+        try:
             self._reference_state_variable_index: int = \
                 model.state_variables.index(
                     reference_state_variable
@@ -39,7 +40,7 @@ class Optimizer:
     @property
     def reference_t_values(self):
         return self._reference_t_values
-    
+
     @reference_t_values.setter
     def reference_t_values(self, reference_t_values_input: List[float]):
         if len(self.reference_values) != len(reference_t_values_input):
@@ -48,7 +49,7 @@ class Optimizer:
             )
 
         for i, t in enumerate(reference_t_values_input[:-1]):
-            if not t < reference_t_values_input[i+1]:
+            if not t < reference_t_values_input[i + 1]:
                 raise AttributeError(
                     "self.reference_t_values must be a list of floats in increasing order"
                 )
@@ -90,7 +91,7 @@ class Optimizer:
         solution = self.model.run_model(
             parameters=parameters, method=self.integration_method
         )
-        
+
         # Get appropiate state variable solution in order to compare with
         # reference values
         solution_reference = solution.y[self._reference_state_variable_index]
@@ -98,7 +99,7 @@ class Optimizer:
         def rms(solution_reference) -> float:
             """Root mean square of the difference between ``reference_values``
             and ``solution_reference``.
-            
+
             """
             diff_squared: np.ndarray = (
                 (np.array(solution_reference) - np.array(self.reference_values)) ** 2
@@ -109,7 +110,7 @@ class Optimizer:
         cost_method_dict: Dict[str, Callable] = {
             'root_mean_square': rms,
         }
-        
+
         try:
             cost_func = cost_method_dict[cost_method]
         except KeyError:
@@ -131,11 +132,11 @@ class Optimizer:
         Parameters
         ----------
         cost_function_method : str
-            Must be one of the permitted values for cost_method parameter in 
+            Must be one of the permitted values for cost_method parameter in
             :method:`Optimize.cost_function`.
         """
         minimize_global_algorithms = {
-            'differential_evolution':  opt.differential_evolution,
+            'differential_evolution': opt.differential_evolution,
             'shgo': opt.shgo,
             'dual_annealing': opt.dual_annealing,
         }
@@ -161,8 +162,8 @@ class Optimizer:
             )
         except TypeError:
             algorithm = [
-                alg[0] for alg in minimize_global_algorithms.items() 
-                    if alg[1] is minimize_algorithm 
+                alg[0] for alg in minimize_global_algorithms.items()
+                if alg[1] is minimize_algorithm
             ]
             algorithm = 'scipy.optimize.' + algorithm.pop(0)
             raise ValueError(
@@ -180,4 +181,4 @@ class Optimizer:
                 'check that your model was appropiately constructed.'
             )
 
-        return  minimization
+        return minimization
