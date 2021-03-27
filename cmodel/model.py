@@ -68,13 +68,13 @@ class CompartmentalModel:
         self,
         state_variables: List[StateVariable],
         parameters: List[Parameter],
-        t_span: List[float] = [0, 10],
+        t_span: Optional[List[float]] = None,
         t_steps: int = 50,
         t_eval: Optional[List[float]] = None
     ) -> None:
         self.state_variables = state_variables
         self.parameters = parameters
-        self.t_span = t_span
+        self.t_span = t_span if t_span else [0, 10]
         self.t_steps = t_steps
         self.t_eval = t_eval if t_eval else list(np.linspace(*t_span, t_steps))
 

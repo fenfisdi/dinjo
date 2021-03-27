@@ -48,7 +48,7 @@ sigma = 1.0
 
 # Optimal parameters found by Boris' Mathematica script
 xi1_opt = 1.09736
-b1_opt = 2.91823E-9 
+b1_opt = 2.91823E-9
 b2_opt = 2.67472E-9
 b3_opt = 4.635E-9
 c1_opt = 0.0000855641
@@ -136,8 +136,8 @@ def seirv_model_example(
     monitor_computation_time: bool = False,
     plot_solution: bool = False,
 ) -> Dict[str, Any]:
-    
-    # Instantiate the model 
+
+    # Instantiate the model
     model_SEIRV = predefined.ModelSEIRV(
         state_variables=state_variables,
         parameters=parameters,
@@ -166,7 +166,7 @@ def seirv_model_example(
         plt.tight_layout()
         plt.show()
         plt.close()
-    
+
     seirv_model_example = {
         'model': model_SEIRV,
         'solution': solution

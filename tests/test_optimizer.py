@@ -4,15 +4,15 @@ import pytest
 import numpy as np
 
 from cmodel import model, optimizer
-from .test_seirv_model import (
+from .test_seirv_model import (                                                # noqa: F401
     state_variables_source, state_variables, parameters_source, parameters,
     model_SEIRV,
 )
 
 
 @pytest.fixture
-def infected(state_variables: model.StateVariable):
-    infected = state_variables[2]
+def infected(state_variables: model.StateVariable):                            # noqa: F811
+    infected: model.StateVariable = state_variables[2]
     return infected
 
 
@@ -43,12 +43,12 @@ def reference_values():
 
 
 def test_optimizer_initialization(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
 ):
     try:
-        seirv_optimizer = optimizer.Optimizer(
+        optimizer.Optimizer(
             model=model_SEIRV,
             reference_state_variable=infected,
             reference_values=reference_values,
@@ -56,7 +56,7 @@ def test_optimizer_initialization(
         )
     except AttributeError:
         assert False
-    except:
+    except Exception:
         assert False
     else:
         assert True
@@ -67,19 +67,19 @@ def test_optimizer_initialization(
     "For example, AttributeError is raised inappropiately"
 )
 def test_optimizer_initialization_error_handling(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
 ):
-    pass
+    raise NotImplementedError
 
 
 @pytest.fixture
 def seirv_optimizer(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
-) ->  optimizer.Optimizer:
+) -> optimizer.Optimizer:
     """
     Optimizer for seirv model.
     """
@@ -95,7 +95,7 @@ def seirv_optimizer(
 
 def test_optimizer_cost_function(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel                                      # noqa: F811
 ):
 
     root_mean_square = seirv_optimizer.cost_function(
@@ -108,7 +108,7 @@ def test_optimizer_cost_function(
 
 def test_optimizer_cost_function_cost_method_value_error(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel                                      # noqa: F811
 ):
     """Test error handling in
     :method:`cmodel.optimizer.Optimizer.cost_function` passing unsupported
@@ -186,7 +186,7 @@ def model_oscillator(
         def build_model(self, t, y, w):
             """Harmonic Oscillator differential equations
             """
-            q, p  = y
+            q, p = y
 
             # Hamilton's equations
             dydt = [
@@ -257,6 +257,7 @@ def optimizer_oscillator(
 
 def test_optimizer_minimize_global_oscillator(
     optimizer_oscillator: optimizer.Optimizer,
+    test_dual_annealing: bool = False
 ):
     """
     Test :method:`Optimizer.minimize_global` mehtod using harmonic Oscillator
@@ -267,7 +268,6 @@ def test_optimizer_minimize_global_oscillator(
     minimize_global_algorithms = ['differential_evolution', 'shgo']
 
     # 'dual_annealing' is very slow (approx 13 seconds for a one-parameter optimization).
-    test_dual_annealing = False
     if test_dual_annealing:
         minimize_global_algorithms.append('dual_annealing')
 
