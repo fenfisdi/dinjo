@@ -4,14 +4,14 @@ import pytest
 import numpy as np
 
 from cmodel import model, optimizer
-from .test_seirv_model import (
+from .test_seirv_model import (                                                # noqa: F401
     state_variables_source, state_variables, parameters_source, parameters,
     model_SEIRV,
 )
 
 
 @pytest.fixture
-def infected(state_variables: model.StateVariable):
+def infected(state_variables: model.StateVariable):                            # noqa: F811
     infected: model.StateVariable = state_variables[2]
     return infected
 
@@ -43,12 +43,12 @@ def reference_values():
 
 
 def test_optimizer_initialization(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
 ):
     try:
-        seirv_optimizer = optimizer.Optimizer(
+        optimizer.Optimizer(
             model=model_SEIRV,
             reference_state_variable=infected,
             reference_values=reference_values,
@@ -67,7 +67,7 @@ def test_optimizer_initialization(
     "For example, AttributeError is raised inappropiately"
 )
 def test_optimizer_initialization_error_handling(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
 ):
@@ -76,7 +76,7 @@ def test_optimizer_initialization_error_handling(
 
 @pytest.fixture
 def seirv_optimizer(
-    model_SEIRV: model.CompartmentalModel,
+    model_SEIRV: model.CompartmentalModel,                                     # noqa: F811
     infected: model.StateVariable,
     reference_values: List[float]
 ) -> optimizer.Optimizer:
@@ -95,7 +95,7 @@ def seirv_optimizer(
 
 def test_optimizer_cost_function(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel                                      # noqa: F811
 ):
 
     root_mean_square = seirv_optimizer.cost_function(
@@ -108,7 +108,7 @@ def test_optimizer_cost_function(
 
 def test_optimizer_cost_function_cost_method_value_error(
     seirv_optimizer: optimizer.Optimizer,
-    model_SEIRV: model.CompartmentalModel
+    model_SEIRV: model.CompartmentalModel                                      # noqa: F811
 ):
     """Test error handling in
     :method:`cmodel.optimizer.Optimizer.cost_function` passing unsupported

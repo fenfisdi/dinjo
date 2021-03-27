@@ -140,8 +140,6 @@ def test_parameters_initialization(
 
 def test_model_SEIRV_build_model(
     model_SEIRV: predefined.ModelSEIRV,
-    state_variables: List[model.StateVariable],
-    parameters: List[model.Parameter]
 ):
     """Tests if evaluation of differential equation defined in SEIRV model is OK"""
 

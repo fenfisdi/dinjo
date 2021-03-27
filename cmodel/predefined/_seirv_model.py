@@ -9,7 +9,7 @@ class ModelSEIRV(CompartmentalModel):
         Lambda, mu, alpha, omega, gamma, xi1, xi2, sigma, b1, b2, b3, c1, c2, c3
     ) -> List[float]:
         """Returns the vector field dy/dt evaluated at a given point in phase space"""
-        
+
         S, Ex, If, R, V = y
 
         def beta(x, b, c):
