@@ -17,3 +17,6 @@
 *.csv
 *experiment*
 *.pyc
+
+# MacOS files
+*.DS_store
