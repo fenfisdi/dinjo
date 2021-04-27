@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import os
 import sys
 from typing import Any, Dict, List, Union
@@ -5,6 +6,7 @@ import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Add project root directory to path
 this_file_dir = os.path.dirname(__file__)
@@ -40,7 +42,9 @@ def oscillator_optimizer_example(
     fake_data_noise_factor: float = 0.30,
     minimization_algorithm: str = 'differential_evolution',
     save_optimization_results_pickle: bool = False,
-    plot_solution: bool = False
+    plot_solution: bool = False,
+    save_csv_file: bool = False,
+    date_fmt: bool = False
 ) -> Dict[str, Any]:
 
     # Define State Variables
@@ -85,57 +89,86 @@ def oscillator_optimizer_example(
     oscillator_parameters_optimization = \
         oscillator_optimizer.minimize_global(algorithm=minimization_algorithm)
 
+    date_equivalent = [
+        datetime.now() + timedelta(days=i) for i in range(len(oscillator_solution.t))
+    ]
+
     # Save pickle
-    if save_optimization_results_pickle:
-        pickle_directory_path = os.path.join(
+    if save_optimization_results_pickle or save_csv_file:
+        files_directory_path = os.path.join(
             this_file_dir,
             'generated_files'
         )
-        pickle_path = os.path.join(
-            pickle_directory_path,
-            'oscillator_parameters_optimization.pickle'
-        )
-        if not os.path.isdir(pickle_directory_path):
+
+        if not os.path.isdir(files_directory_path):
             try:
-                os.mkdir(pickle_directory_path)
+                os.mkdir(files_directory_path)
             except OSError:
-                print("Creation of the directory %s failed" % pickle_directory_path)
+                print("Creation of the directory %s failed" % files_directory_path)
             else:
-                print("Successfully created the directory %s " % pickle_directory_path)
-        pickle.dump(
-            oscillator_parameters_optimization,
-            open(pickle_path, 'wb')
-        )
+                print("Successfully created the directory %s " % files_directory_path)
+
+                if save_optimization_results_pickle:
+                    pickle_path = os.path.join(
+                        files_directory_path,
+                        'oscillator_parameters_optimization.pickle'
+                    )
+                    pickle.dump(
+                        oscillator_parameters_optimization,
+                        open(pickle_path, 'wb')
+                    )
 
     # Calculate differential equation solution using optimized parameters
     if oscillator_parameters_optimization.success:
         oscillator_optimal_solution = oscillator_model.run_model(
             parameters=oscillator_parameters_optimization.x
         )
+        if save_csv_file:
+            csv_path = os.path.join(
+                files_directory_path,
+                'oscillator_csv_example.csv'
+            )
+            pd.DataFrame(
+                {
+                    'date': [
+                        date.strftime('%Y-%m-%d') for date in date_equivalent
+                    ],
+                    'user_data_variable_X': oscillator_fake_position_data,
+                    'optimal_solution_variable_X': oscillator_optimal_solution.y[0]
+                }
+            ).to_csv(csv_path, header=True, index=False)
     else:
         oscillator_optimal_solution = None
         print("Parameter optimization did not succed.")
 
     # Plot solution
     if plot_solution:
+        oscillator_solution.t = date_equivalent if date_fmt else oscillator_solution.t
+        oscillator_optimal_solution.t = date_equivalent if date_fmt else oscillator_solution.t
+        xdate_val = True if date_fmt else False
+
         plt.figure()
-        plt.plot(
+        if date_fmt:
+            plt.xticks(rotation=70)
+        plt.plot_date(
             oscillator_solution.t, oscillator_solution.y[0],
             'k-',
             label='Exact Solution using '
-                  f'$\omega={omega.initial_value:.3f}$'
+                  f'$\omega={omega.initial_value:.3f}$',
+            xdate=xdate_val
         )
-        plt.plot(
+        plt.plot_date(
             oscillator_solution.t, oscillator_fake_position_data,
-            'ro', label='Noisy fake data'
+            'ro', label='Noisy fake data', xdate=xdate_val
         )
         try:
-            plt.plot(
+            plt.plot_date(
                 oscillator_optimal_solution.t, oscillator_optimal_solution.y[0],
                 'k-*',
                 label='Optimized solution from noisy data\n'
                       f'using {minimization_algorithm} algorithm\n'
-                      f'$\omega={oscillator_parameters_optimization.x[0]:.3f}$'
+                      f'$\omega={oscillator_parameters_optimization.x[0]:.3f}$',
+                xdate=xdate_val
             )
         except Exception:
             pass
@@ -162,5 +195,7 @@ def oscillator_optimizer_example(
 if __name__ == '__main__':
     oscillator_optimizer_example(
         plot_solution=True,
-        save_optimization_results_pickle=True
+        save_optimization_results_pickle=True,
+        save_csv_file=True,
+        date_fmt=True
     )
