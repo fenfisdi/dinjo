@@ -13,6 +13,12 @@ pillow = ">=8.1.1"
 pytest = "*"
 pandas = "*"
 flake8 = "*"
+pytest-cov = "*"
+
+[scripts]
+tests = "python -m pytest tests"
+tests-cov = "python -m pytest tests --cov cmodel"
+tests-cov-html = "python -m pytest tests --cov-report html --cov cmodel"
 
 [requires]
 python_version = "3.9"
