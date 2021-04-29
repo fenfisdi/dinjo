@@ -51,7 +51,7 @@ def optimizer_seirv_model_colombia_example(
     # Optimization using the desired algorith
     t0 = time()
     seirv_colombia_parameters_optimization = \
-        optimizer_seirv_model_colombia.minimize_global(
+        optimizer_seirv_model_colombia.minimize(
             cost_method='root_mean_square',
             algorithm=minimization_algorithm,
             algorithm_kwargs=algorithm_kwargs

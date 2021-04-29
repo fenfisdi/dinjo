@@ -121,7 +121,7 @@ class Optimizer:
 
         return cost_func(solution_reference)
 
-    def minimize_global(
+    def minimize(
         self,
         cost_method: str = 'root_mean_square',
         algorithm: str = 'differential_evolution',
