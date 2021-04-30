@@ -2,21 +2,17 @@ from typing import List
 
 from cmodel.model import CompartmentalModel
 
-class ModelSIR(CompartmentalModel):
-    def build_model(
-        self, t, y,
-        lmbd, gI, omega, gamma, gB, gP, gV, mu,
-    ) -> List[float]:
-        """Returns the vector field dy/dt evaluated at a given point in phase space"""
-
-        S, If, R = y
-
-        principal_flux = gI * S * If / (S + If + R)
-
-        dydt = [
-            lmbd + gP * R - gV * S - principal_flux - mu * S,
-            principal_flux - gB * R - (gamma + omega + mu ) * I,
-            gamma * If + gV * S - ( gB + gP ) * If
-        ]
-
-        return dydt
+class SIR_model(CompartmentalModel):
+    
+    def build_model( self, t, y,
+                    Lmbd, mu, omega, gamma, chi, eta, Pi, tau) -> List[float]:
+        """
+        Returns the vector field dy/dt evaluated at a given point in phase space
+        """
+        S, I, R = y
+    
+        dS = Lmbd + Pi*R - tau*S*I - (chi+mu)*S
+        dI = tau*S*I - eta*R - (gamma+omega+mu)*I
+        dR = gamma*I + chi*S - (eta+Pi+mu)*R
+    
+        return [dS, dI, dR]
