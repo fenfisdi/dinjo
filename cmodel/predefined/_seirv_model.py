@@ -4,12 +4,12 @@ from cmodel.model import CompartmentalModel
 
 
 class ModelSEIRV(CompartmentalModel):
-    def build_model(
-        self, t, y,
-        Lambda, mu, alpha, omega, gamma, xi1, xi2, sigma, b1, b2, b3, c1, c2, c3
-    ) -> List[float]:
-        """Returns the vector field dy/dt evaluated at a given point in phase space"""
 
+    def build_model(self, t, y,
+                    Lambda, mu, alpha, omega, gamma, xi_E, xi_I, sigma, b1, b2, b3, c1, c2, c3) -> List[float]:
+        """
+        Returns the vector field dy/dt evaluated at a given point in phase space
+        """
         S, Ex, If, R, V = y
 
         def beta(x, b, c):
@@ -22,7 +22,7 @@ class ModelSEIRV(CompartmentalModel):
             principal_flux - (alpha + mu) * Ex,
             alpha * Ex - (omega + gamma + mu) * If,
             gamma * If - mu * R,
-            xi1 * Ex + xi2 * If - sigma * V
+            xi_E * Ex + xi_I * If - sigma * V
         ]
 
         return dydt

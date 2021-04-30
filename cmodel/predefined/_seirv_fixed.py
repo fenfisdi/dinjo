@@ -1,0 +1,23 @@
+from typing import List
+
+from cmodel.model import CompartmentalModel
+
+
+class SEIR_model(CompartmentalModel):
+
+    def build_model(self, t, y,
+                    Lmbd, mu, omega, gamma, alpha, xi_E, xi_I, sigma, beta_E, beta_I, beta_V) -> List[float]:
+        """
+        Returns the vector field dy/dt evaluated at a given point in phase space
+        """
+        S, E, I, R, V = y
+
+        dydt=[
+            Lmbd - beta_E*S*E - beta_I*S*I - beta_V*S*V - mu*S,
+            beta_E*S*E + beta_I*S*I + beta_V*S*V - E/alpha - mu*E,
+            E/alpha - (gamma + omega + mu)*I,
+            gamma*I - mu*R,
+            xi_E*E + xi_I*I - sigma*V
+        ]
+            
+        return dydt
