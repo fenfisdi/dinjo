@@ -135,18 +135,18 @@ class Optimizer:
             Must be one of the permitted values for cost_method parameter in
             :method:`Optimize.cost_function`.
         """
-        minimize_global_algorithms = {
+        minimize_algorithms = {
             'differential_evolution': opt.differential_evolution,
             'shgo': opt.shgo,
             'dual_annealing': opt.dual_annealing,
         }
 
         try:
-            minimize_algorithm = minimize_global_algorithms[algorithm]
+            minimize_algorithm = minimize_algorithms[algorithm]
         except KeyError:
             raise ValueError(
                 "value of algorithm not permitted. Accepted values are "
-                f"{minimize_global_algorithms.keys()}"
+                f"{minimize_algorithms.keys()}"
             )
 
         bounds = [
@@ -162,7 +162,7 @@ class Optimizer:
             )
         except TypeError:
             algorithm = [
-                alg[0] for alg in minimize_global_algorithms.items()
+                alg[0] for alg in minimize_algorithms.items()
                 if alg[1] is minimize_algorithm
             ]
             algorithm = 'scipy.optimize.' + algorithm.pop(0)
