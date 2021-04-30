@@ -11,8 +11,10 @@ class SIR_model(CompartmentalModel):
         """
         S, I, R = y
     
-        dS = Lmbd + Pi*R - tau*S*I - (chi+mu)*S
-        dI = tau*S*I - eta*R - (gamma+omega+mu)*I
-        dR = gamma*I + chi*S - (eta+Pi+mu)*R
-    
-        return [dS, dI, dR]
+        dydt=[
+            Lmbd + Pi*R - tau*S*I - (chi+mu)*S,
+            tau*S*I - eta*R - (gamma+omega+mu)*I,
+            gamma*I + chi*S - (eta+Pi+mu)*R
+        ]
+
+        return dydt
