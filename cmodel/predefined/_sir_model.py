@@ -3,7 +3,7 @@ from typing import List
 from cmodel.model import CompartmentalModel
 
 
-class SIR_model(CompartmentalModel):
+class ModelSIR(CompartmentalModel):
 
     def build_model(
         self, t, y,
