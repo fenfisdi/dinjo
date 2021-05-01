@@ -5,8 +5,10 @@ from cmodel.model import CompartmentalModel
 
 class ModelSEIRV(CompartmentalModel):
 
-    def build_model(self, t, y,
-                    Lambda, mu, alpha, omega, gamma, xi_E, xi_I, sigma, b1, b2, b3, c1, c2, c3) -> List[float]:
+    def build_model(
+        self, t, y,
+        Lambda, mu, alpha, omega, gamma, xi_E, xi_I, sigma, b1, b2, b3, c1, c2, c3
+    ) -> List[float]:
         """
         Returns the vector field dy/dt evaluated at a given point in phase space
         """
