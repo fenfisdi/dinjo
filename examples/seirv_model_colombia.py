@@ -40,29 +40,29 @@ seirv_state_variables_colombia = [
 # Parameters not variated by Boris' Mathematica script
 Lambda = 2083.62
 mu = 0.0000150767
-alpha = 0.172414
+alpha = 1. / 0.172414
 omega = 0.0114
 gamma = 0.0666667
-xi2 = 6.32609
+xi_I = 6.32609
 sigma = 1.0
 
 # Optimal parameters found by Boris' Mathematica script
-xi1_opt = 1.09736
-b1_opt = 2.91823E-9
-b2_opt = 2.67472E-9
-b3_opt = 4.635E-9
-c1_opt = 0.0000855641
-c2_opt = 2.94906E-7
-c3_opt = 0.159107
+xi_E_opt = 1.09736
+b_E_opt = 2.91823E-9
+b_I_opt = 2.67472E-9
+b_V_opt = 4.635E-9
+c_E_opt = 0.0000855641
+c_I_opt = 2.94906E-7
+c_V_opt = 0.159107
 
 # Parameters used to define their own bounds via the function
 # param_sample_range
-xi1 = 2.3
-b1, b2, b3 = 1.5 * 3.11e-9, 1.5 * 0.62e-9, 1.5 * 1.03e-9
+xi_E = 2.3
+b_E, b_I, b_V = 1.5 * 3.11e-9, 1.5 * 0.62e-9, 1.5 * 1.03e-9
 
-# Bounds of c and xi2 parameters used in Boris' Mathematica script
+# Bounds of c and xi_I parameters used in Boris' Mathematica script
 c_bounds = [0, 1]
-xi2_bounds = [0, 10]
+xi_I_bounds = [0, 10]
 
 # param_range_width used in Boris' Mathematica script
 param_range_width = 3
@@ -70,20 +70,20 @@ param_range_width = 3
 # Each element of the list refers to a parameter
 # (name, representation, initial_value, bounds)
 seirv_parameters_colombia_src = [
-    ("Lambda", "Lambda", Lambda, [Lambda, Lambda]),
+    ("Lambda", "Lmbd", Lambda, [Lambda, Lambda]),
     ("mu", "mu", mu, [mu, mu]),
     ("alpha", "alpha", alpha, [alpha, alpha]),
     ("omega", "omega", omega, [omega, omega]),
     ("gamma", "gamma", gamma, [gamma, gamma]),
-    ("xi1", "xi1", xi1_opt, param_sample_range(xi1, param_range_width)),
-    ("xi2", "xi2", xi2, xi2_bounds),
+    ("xi_E", "xi_E", xi_E_opt, param_sample_range(xi_E, param_range_width)),
+    ("xi_I", "xi_I", xi_I, xi_I_bounds),
     ("sigma", "sigma", sigma, [sigma, sigma]),
-    ("b1", "b1", b1_opt, param_sample_range(b1, param_range_width)),
-    ("b2", "b2", b2_opt, param_sample_range(b2, param_range_width)),
-    ("b3", "b3", b3_opt, param_sample_range(b3, param_range_width)),
-    ("c1", "c1", c1_opt, c_bounds),
-    ("c2", "c2", c2_opt, c_bounds),
-    ("c3", "c3", c3_opt, c_bounds),
+    ("b_E", "b_E", b_E_opt, param_sample_range(b_E, param_range_width)),
+    ("b_I", "b_I", b_I_opt, param_sample_range(b_I, param_range_width)),
+    ("b_V", "b_V", b_V_opt, param_sample_range(b_V, param_range_width)),
+    ("c_E", "c_E", c_E_opt, c_bounds),
+    ("c_I", "c_I", c_I_opt, c_bounds),
+    ("c_V", "c_V", c_V_opt, c_bounds),
 ]
 seirv_parameters_colombia_src = [
     {

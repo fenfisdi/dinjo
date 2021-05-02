@@ -34,7 +34,7 @@ def parameters_source():
     parameters_source = [
         ("Lambda", "Lambda", 2083.62),
         ("mu", "mu", 0.0000150767),
-        ("alpha", "alpha", 0.172414),
+        ("alpha", "alpha", 1. / 0.172414),
         ("omega", "omega", 0.0114),
         ("gamma", "gamma", 0.0666667),
         ("xi1", "xi1", 1.09736),
