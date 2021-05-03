@@ -136,6 +136,7 @@ def optimizer_seirv_model_colombia_example(
         df_optimization_log = pd.read_csv(
             csv_file_path, index_col=csv_column_names[0]
         )
+
         optimization_csv_row = {
             csv_column_names[1]: computation_time,
             csv_column_names[2]: minimization_algorithm,
