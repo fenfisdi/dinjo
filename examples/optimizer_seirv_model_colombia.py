@@ -4,13 +4,14 @@ import sys
 import os
 import pickle
 from time import time
+from datetime import datetime
 from typing import Any, Dict
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from cmodel_examples_utilities import setup_csv
+from cmodel_examples_utilities import int_to_str_date, setup_csv
 
 # Add project root and this file's directories to path in order to find cmodel
 # package
@@ -30,15 +31,18 @@ def optimizer_seirv_model_colombia_example(
     algorithm_kwargs={
         'popsize': 20,
         'disp': True,
-        'tol': 0.001,
+        'tol': 0.0015,
         'maxiter': 100,
         'mutation': [0.3, 0.7],
+        'atol': 200
     },
     print_optimization_log: bool = False,
     save_optimization_results: bool = False,
     generated_files_directory_name: str = 'generated_files',
     file_base_name: str = 'seirv_model_colombia_parameters_optimization',
-    plot_results: bool = False
+    plot_results: bool = False,
+    save_optimal_solution: bool = False,
+    csv_optimal_solution_path: str = ''
 ) -> Dict[str, Any]:
 
     seirv_model_example_col = seirv_model_example()
@@ -162,10 +166,12 @@ def optimizer_seirv_model_colombia_example(
             open(file_base_path + '.pickle', 'wb')
         )
 
-    if plot_results:
+    if plot_results or save_optimal_solution:
         optimal_solution = optimizer_seirv_model_colombia.model.run_model(
             parameters=seirv_colombia_parameters_optimization.x
         )
+
+    if plot_results:
 
         plt.figure()
         plt.plot(
@@ -191,13 +197,44 @@ def optimizer_seirv_model_colombia_example(
         'computation_time': computation_time,
     }
 
+    if save_optimal_solution:
+        t_dates = []
+        initial_date = datetime.utcnow()
+
+        for i in range(len(optimal_solution.t)):
+            t_dates.append(int_to_str_date(i, initial_date))
+
+        df = pd.DataFrame(
+            {
+                'date': t_dates,
+                'I_reference': infected_reference_col,
+                'S_optimal': optimal_solution.y[0],
+                'E_optimal': optimal_solution.y[1],
+                'I_optimal': optimal_solution.y[2],
+                'R_optimal': optimal_solution.y[3],
+                'V_optimal': optimal_solution.y[4],
+            }
+        )
+
+        df.set_index('date', inplace=True)
+
+        df.to_csv(csv_optimal_solution_path)
+
     return optimizer_seirv_model_colombia_example
 
 
 if __name__ == "__main__":
+    csv_optimal_solution_path = os.path.join(
+        this_file_dir,
+        'generated_files',
+        'seirv_model_colombia_optimal_solution.csv'
+    )
+
     optimizer_seirv_model_colombia_example(
         minimization_algorithm='differential_evolution',
         print_optimization_log=True,
         save_optimization_results=True,
-        plot_results=True
+        plot_results=True,
+        save_optimal_solution=False,
+        csv_optimal_solution_path=csv_optimal_solution_path
     )
