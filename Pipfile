@@ -19,7 +19,7 @@ pytest-cov = "*"
 tests = "python -m pytest tests"
 tests-cov = "python -m pytest tests --cov cmodel"
 tests-cov-html = "python -m pytest tests --cov-report html --cov cmodel"
-linter = "flake8 cmodel tests --max-line-length=99"
+linter = "flake8 cmodel tests examples --max-line-length=99"
 
 [requires]
 python_version = "3.9"
