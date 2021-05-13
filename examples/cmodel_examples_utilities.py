@@ -1,6 +1,7 @@
 """Some helper functions and variables used to execute the examples of the
 cmodels package.
 """
+from datetime import datetime, timedelta
 import os
 import csv
 from pathlib import Path
@@ -60,3 +61,7 @@ def setup_csv(
             csv_writer.writerow(first_row)
 
     return True
+
+
+def int_to_str_date(i: int, initial_date: datetime) -> str:
+    return (datetime.utcnow() + timedelta(days=i)).strftime('%Y-%m-%d')

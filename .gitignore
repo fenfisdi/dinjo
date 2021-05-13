@@ -147,6 +147,19 @@ cython_debug/
 .env
 .data/*
 .db_config
+
+# /cmodel/
+/cmodel/_build_model.py
+
+
+# /examples/
+/examples/diff_evol_wrapper.py
+
+
+# /tests/
+
+
+# General
 *.pickle
 *.txt
 *.csv
@@ -159,6 +172,9 @@ cython_debug/
 
 # General (custom)
 *experiment*
+
+!*infected_reference_col.csv
+
 
 # MacOS files
 *.DS_store
