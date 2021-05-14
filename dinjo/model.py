@@ -86,7 +86,7 @@ class Parameter(Variable):
         self._bounds = bounds_input
 
 
-class CompartmentalModel:
+class ModelIVP:
     def __init__(
         self,
         state_variables: List[StateVariable],
