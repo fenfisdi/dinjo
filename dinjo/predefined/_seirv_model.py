@@ -1,6 +1,6 @@
 from typing import List
 
-from cmodel.model import CompartmentalModel
+from ..model import CompartmentalModel
 
 
 class ModelSEIRV(CompartmentalModel):
@@ -17,7 +17,9 @@ class ModelSEIRV(CompartmentalModel):
         def beta(x, b, c):
             return b / (1. + c * x)
 
-        principal_flux = S * (beta(E, beta_E, c_E) * E + beta(I, beta_I, c_I) * I + beta(V, beta_V, c_V) * V)
+        principal_flux = S * (
+            beta(E, beta_E, c_E) * E + beta(I, beta_I, c_I) * I + beta(V, beta_V, c_V) * V
+        )
 
         dydt = [
             Lmbd - principal_flux - S * mu,

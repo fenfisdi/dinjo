@@ -1,17 +1,17 @@
 import setuptools 
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md", "r") as f:
+    long_description = f.read()
 
 setuptools.setup(
-    name='cdslib_cmodel',
+    name='DINJO',
     version='0.0.0',
-    description='Contagious Disease Simulation - Compartmental Models',
+    description='DINJO lets you find optimal values of initial value problems\' parameters',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author='Juan Esteban Aristizabal Zuluaga',
+    author='Juan Esteban Aristizabal-Zuluaga',
     author_email='jeaz.git@gmail.com',
     license='gplv3',
-    packages=['cmodel'],
+    packages=['dinjo'],
     zip_safe=False
 )

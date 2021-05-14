@@ -13,8 +13,7 @@ this_file_dir = os.path.dirname(__file__)
 project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(project_root_dir)
 
-from cmodel import model
-from cmodel import optimizer
+from dinjo import model, optimizer
 
 
 class ModelOscillator(model.CompartmentalModel):

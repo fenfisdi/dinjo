@@ -1,6 +1,6 @@
 from typing import List
 
-from cmodel.model import CompartmentalModel
+from ..model import CompartmentalModel
 
 
 class ModelSimpleSEIRV(CompartmentalModel):

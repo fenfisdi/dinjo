@@ -4,7 +4,7 @@ import pytest
 from pytest import approx
 import numpy as np
 
-from cmodel import model, predefined
+from dinjo import model, predefined
 from examples.col_vars_params import (
     seirv_state_variables_colombia_src,
     seirv_parameters_colombia_src_ini
