@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from typing import Callable, List, Dict, Any
 
 import math
@@ -17,7 +17,7 @@ class Optimizer:
         reference_t_values: List[float],
         integration_method: str = 'RK45',
     ) -> None:
-        self.model = copy.deepcopy(model)
+        self.model = deepcopy(model)
 
         self.reference_state_variable = reference_state_variable
         self.reference_values = reference_values

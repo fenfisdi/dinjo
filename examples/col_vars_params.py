@@ -1,4 +1,4 @@
-from cmodel.model import Parameter, StateVariable
+from dinjo.model import Parameter, StateVariable
 from examples.cmodel_examples_utilities import param_sample_range
 
 # Instantiation of state variables and parameters

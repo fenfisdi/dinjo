@@ -3,7 +3,7 @@ from typing import List
 import pytest
 import numpy as np
 
-from cmodel import model, optimizer
+from dinjo import model, optimizer
 from .test_seirv_model import (                                                # noqa: F401
     state_variables_source, state_variables, parameters_source, parameters,
     model_SEIRV,

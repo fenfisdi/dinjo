@@ -20,7 +20,7 @@ project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
-import cmodel.optimizer as optimizer
+import dinjo.optimizer as optimizer
 from seirv_model_colombia import (
     seirv_state_variables_colombia, seirv_model_example, infected_reference_col
 )

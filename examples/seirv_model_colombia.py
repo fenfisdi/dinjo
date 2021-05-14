@@ -13,7 +13,7 @@ project_root_dir = os.path.join(this_file_dir, '..')
 sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
-from cmodel import model, predefined
+from dinjo import model, predefined
 # State variables and parameters are setup in col_vars_params.py module
 from examples.col_vars_params import (
     seirv_state_variables_colombia,
