@@ -11,7 +11,7 @@ from . import model
 class Optimizer:
     def __init__(
         self,
-        model: model.CompartmentalModel,
+        model: model.ModelIVP,
         reference_state_variable: model.StateVariable,
         reference_values: List[float],
         reference_t_values: List[float],

@@ -16,7 +16,7 @@ sys.path.append(project_root_dir)
 from dinjo import model, optimizer
 
 
-class ModelOscillator(model.CompartmentalModel):
+class ModelOscillator(model.ModelIVP):
     def build_model(self, t, y, w):
         """Harmonic Oscillator differential equations
         """

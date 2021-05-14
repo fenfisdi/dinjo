@@ -1,9 +1,9 @@
 from typing import List
 
-from ..model import CompartmentalModel
+from ..model import ModelIVP
 
 
-class ModelSIR(CompartmentalModel):
+class ModelSIR(ModelIVP):
 
     def build_model(
         self, t, y,

@@ -6,7 +6,18 @@ from scipy.integrate import solve_ivp
 
 
 class Variable:
-    """Represents a state variable"""
+    """Represents a variable
+
+    Attributes
+    ----------
+    name : str
+        name of the variable.
+    representation : str
+        string representing the state variable (could be the same as
+        name.)
+    initial_value : float
+        reference value of the variable being represented.
+    """
     def __init__(
         self, name: str, representation: str, initial_value: float = 0,
         *args, **kwargs
@@ -17,10 +28,24 @@ class Variable:
 
 
 class StateVariable(Variable):
+    """Represents a State Variable of an initial value problem."""
     pass
 
 
 class Parameter(Variable):
+    """Represents a parameter of the differential equations definining
+    an initial value problem.
+
+    Attributes
+    ----------
+    In addition to the attributes defined in
+    :class:`dinjo.model.Variable`:
+
+    bounds : array-like
+        list containing the minimum and maximum values that the
+        parameter can take. The first value is minimum, the second one
+        is the maximum value.
+    """
     def __init__(
         self, name: str, representation: str, initial_value: float = 0,
         *args, bounds: Optional[List[float]] = None, **kwargs
@@ -30,8 +55,6 @@ class Parameter(Variable):
 
     @property
     def bounds(self):
-        """Bounds of the parameters. Needed for optimization.
-        """
         return self._bounds
 
     @bounds.setter
@@ -63,7 +86,7 @@ class Parameter(Variable):
         self._bounds = bounds_input
 
 
-class CompartmentalModel:
+class ModelIVP:
     def __init__(
         self,
         state_variables: List[StateVariable],
