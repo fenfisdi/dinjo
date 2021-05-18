@@ -9,6 +9,25 @@ from . import model
 
 
 class Optimizer:
+    """Optimizes the initial value problem's parameters, as defined in
+    the class :class:`ModelIVP`.
+
+    Attributes
+    ----------
+    model : :class:`ModelIVP`
+        the initial value problem to be optimized.
+    reference_state_variable :class:`StateVariable`
+        the state variable to be fitted to the solution of the IVP.
+    reference_values : list[float]
+        the 'experimental data' of the reference state variable to be
+        used as the fitting variable.
+    reference_t_values : list[float]
+        the corresponding times at which the reference_values are given.
+    integration_method : str
+        must be one of the methods accepted by
+        ``scipy.integrate.solve_ivp``.
+
+    """
     def __init__(
         self,
         model: model.ModelIVP,
@@ -82,10 +101,12 @@ class Optimizer:
 
         Parameters
         ----------
-        parameters : str
-            parameters of the model to be minimized
+        parameters : list[float]
+            parameters of the model to be minimized. The order of the
+            parameters must be the same as they appear in
+            ``self.model.parameters``.
         cost_method : str
-            Must be one of ``['root_mean_square',]``, etc.
+            Must be one of ``['root_mean_square',]``.
         """
         self.model.t_eval = self.reference_t_values
         solution = self.model.run_model(
@@ -134,6 +155,19 @@ class Optimizer:
         cost_function_method : str
             Must be one of the permitted values for cost_method parameter in
             :method:`Optimize.cost_function`.
+        algorithm : str
+            scipy.optimize algorithm used for the optimization. Must be
+            one of ``'differential_evolution'``, ``'shgo'``,
+            ``'dual_annealing'``.
+        algorithm_kwargs : dict[str, any]
+            parameters passed to the optimization algorithm. They are
+            different depending on the algorithm.
+
+        Returns
+        -------
+        minimization
+            object containing the minimization result as returned by
+            the appropiate scipy algorithm (e.g. if the chosen al).
         """
         minimize_algorithms = {
             'differential_evolution': opt.differential_evolution,
