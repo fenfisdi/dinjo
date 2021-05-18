@@ -154,7 +154,7 @@ class Optimizer:
         ----------
         cost_function_method : str
             Must be one of the permitted values for cost_method parameter in
-            :method:`Optimize.cost_function`.
+            :meth:`Optimize.cost_function`.
         algorithm : str
             scipy.optimize algorithm used for the optimization. Must be
             one of ``'differential_evolution'``, ``'shgo'``,

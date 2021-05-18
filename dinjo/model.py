@@ -90,8 +90,8 @@ class ModelIVP:
 
     Attributes
     ----------
-    state_variables : list[ :class:`StateVariable` ]
-    parameters : list[ class:`Parameter` ]
+    state_variables : list[:class:`StateVariable`]
+    parameters : list[:class:`Parameter`]
     t_span : 2-tuple of floats
         Interval of integration (t0, tf). The solver starts with t=t0
         and integrates until it reaches t=tf.
@@ -142,7 +142,7 @@ class ModelIVP:
         Override this method so that it contains the differential
         equations of your IVP. The signature of the method must be
         ``build_model(self, t, y, *args)`` where ``t`` is the time,
-        ``y`` is the state vector, and ``*args``are other parameters of
+        ``y`` is the state vector, and ``args`` are other parameters of
         the system.
 
         Parameters
@@ -151,7 +151,7 @@ class ModelIVP:
             time at which the differential equation must be evaluated.
         y : list[float]
             state vector at which the differential must be evaluated.
-        *args : any
+        \*args : any
             other parameters of the differential equation
 
         Returns
@@ -162,13 +162,13 @@ class ModelIVP:
         Note
         ----
         The parameters must be defined in the same order in which the
-        parameters are stored in :attribute:`ModelIVP.parameters`.
+        parameters are stored in :attr:`ModelIVP.parameters`.
 
         Note
         ----
         The state variable vector must be defined in the same order
         in which the state variables are stored in
-        :attribute:`ModelIVP.state_variables`.
+        :attr:`ModelIVP.state_variables`.
 
         Example
         -------
