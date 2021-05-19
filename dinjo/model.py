@@ -41,10 +41,9 @@ class Parameter(Variable):
     In addition to the attributes defined in
     :class:`dinjo.model.Variable`:
 
-    bounds : array-like
+    bounds : 2-tuple of floats.
         list containing the minimum and maximum values that the
-        parameter can take. The first value is minimum, the second one
-        is the maximum value.
+        parameter can take ``(min, max)``.
     """
     def __init__(
         self, name: str, representation: str, initial_value: float = 0,
@@ -87,6 +86,23 @@ class Parameter(Variable):
 
 
 class ModelIVP:
+    """Defines and integrates an initial value problem.
+
+    Attributes
+    ----------
+    state_variables : list[:class:`StateVariable`]
+    parameters : list[:class:`Parameter`]
+    t_span : 2-tuple of floats
+        Interval of integration (t0, tf). The solver starts with t=t0
+        and integrates until it reaches t=tf.
+    t_steps : int
+        The solver will get the solution for ``t_steps`` equally
+        separated times from ``t0`` to ``tf``.
+    t_span : list[float]
+        List containing the time values in which the user wants to
+        evaluate the solution. All the values must be within the
+        interval defined by ``t_span``.
+    """
     def __init__(
         self,
         state_variables: List[StateVariable],
@@ -108,17 +124,71 @@ class ModelIVP:
 
     @property
     def state_variables_init_vals(self) -> List[float]:
-        """Get the values of the model's state variables initial values in the
-        order they are currently stored in ``self.state_variables``."""
+        """Get the values of the model's state variables initial values
+        in the order they are currently stored in ``self.state_variables``.
+        """
         return self._get_variable_init_vals(self.state_variables)
 
     @property
     def parameters_init_vals(self):
-        """Get the values of the model's parameters initial values in the
-        order they are currently stored in ``self.parameters``."""
+        """Get the values of the model's parameters initial values in
+        theorder they are currently stored in ``self.parameters``.
+        """
         return self._get_variable_init_vals(self.parameters)
 
     def build_model(self, t, y, *args):
+        """Defines the differntial equations of the model.
+
+        Override this method so that it contains the differential
+        equations of your IVP. The signature of the method must be
+        ``build_model(self, t, y, *args)`` where ``t`` is the time,
+        ``y`` is the state vector, and ``args`` are other parameters of
+        the system.
+
+        Parameters
+        ----------
+        t : float
+            time at which the differential equation must be evaluated.
+        y : list[float]
+            state vector at which the differential must be evaluated.
+        \*args : any
+            other parameters of the differential equation
+
+        Returns
+        -------
+        The method must return the time derivative of the
+        state vector evaluated at a given time.
+
+        Note
+        ----
+        The parameters must be defined in the same order in which the
+        parameters are stored in :attr:`ModelIVP.parameters`.
+
+        Note
+        ----
+        The state variable vector must be defined in the same order
+        in which the state variables are stored in
+        :attr:`ModelIVP.state_variables`.
+
+        Example
+        -------
+        For example if you want to simulate a harmonic
+        oscillator of frequency :math:`\omega` and mass :math:`m`
+        this method must be implemented as follows:
+
+        .. code-block:: python
+
+            def build_model(self, t, y, w, m):
+                q, p = y
+
+                # Hamilton's equations
+                dydt = [
+                    p,                      # dq/dt
+                    - (w ** 2) * q          # dp/dt
+                ]
+
+                return dydt
+        """
         raise NotImplementedError
 
     def run_model(
@@ -126,7 +196,44 @@ class ModelIVP:
         parameters: List[float] = None,
         method: str = 'RK45'
     ):
-        """Integrate model using ``scipy.integrate.solve_ivp``"""
+        """Integrate model using ``scipy.integrate.solve_ivp``
+
+        Parameters
+        ----------
+        parameters : list[float]
+            List of the values of the paramters of the initial value
+            problem.
+        method : srt
+            Integration method. Must be one of the methods accepted
+            by ``scipy.integrate.solve_ivp``
+
+        Returns
+        -------
+        Bunch object with the following fields defined (same return type
+        as scipy.integrate.solve_ivp):
+        t : ndarray, shape (n_points,)
+            Time points.
+        y : ndarray, shape (n, n_points)
+            Values of the solution at t.
+        sol : OdeSolution or None
+            Found solution as OdeSolution instance; None if dense_output
+            was set to False.
+        t_events : list of ndarray or None
+            Contains for each event type a list of arrays at which an
+            event of that type event was detected. None if events was
+            None.
+        y_events : list of ndarray or None
+            For each value of t_events, the corresponding value of the
+            solution. None if events was None.
+        nfev : int
+            Number of evaluations of the right-hand side.
+        njev : int
+            Number of evaluations of the Jacobian.
+        nlu : int
+            Number of LU decompositions.
+        status : int
+            Reason for algorithm termination:
+        """
 
         parameters = (
             parameters if parameters is not None else self.parameters_init_vals
