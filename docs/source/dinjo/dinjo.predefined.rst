@@ -1,10 +1,22 @@
-dinjo.predefined package
-========================
+.. _code-dinjo.predefined:
 
-Module contents
----------------
+===============================
+:mod:`dinjo.predefined` package
+===============================
+
+
+Package contents
+================
 
 .. automodule:: dinjo.predefined
    :members:
    :undoc-members:
    :show-inheritance:
+
+Subpackages
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   dinjo.predefined.epidemiology

@@ -61,20 +61,24 @@ The Source Code
 
    :mod:`dinjo.model`
       Define your own initial value problems (IVPs) and solve them using this module.
-   
+
    :mod:`dinjo.optimizer`
       Define your IVP optimization problem and solve it using this module.
 
    :mod:`dinjo.predefined`
-      Here are some predefined model
+      Some predefined models
 
-      :mod:`dinjo.predefined._seir_model`
+      :mod:`dinjo.predefined.epidemiology._seir_model`
+         SEIR initial value problem.
 
-      :mod:`dinjo.predefined._seirv_model`
+      :mod:`dinjo.predefined.epidemiology._seirv_model`
+         SEIRV initial value problem.
       
-      :mod:`dinjo.predefined._seirv_fixed`
+      :mod:`dinjo.predefined.epidemiology._seirv_fixed`
+         SEIR initial value problem.
       
-      :mod:`dinjo.predefined._sir_model`
+      :mod:`dinjo.predefined.epidemiology._sir_model`
+         SIR initial value problem.
 
 Indices and tables
 ==================

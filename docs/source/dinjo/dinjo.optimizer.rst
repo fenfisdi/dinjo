@@ -1,5 +1,8 @@
-dinjo.optimizer
-===============
+.. _code-dinjo.optimizer:
+
+======================
+:mod:`dinjo.optimizer`
+======================
 
 .. automodule:: dinjo.optimizer
    :members:

@@ -1,8 +1,8 @@
 .. _code-dinjo:
 
-=============
-dinjo package
-=============
+====================
+:mod:`dinjo` package
+====================
 
 Package contents
 ================
