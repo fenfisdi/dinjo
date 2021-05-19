@@ -13,9 +13,12 @@ sphinx:
 formats:
   - pdf
 
+build:
+  image: testing
+
 # Optionally set the version of Python and requirements required to build your docs
 python:
-   version: 3.8
+   version: 3.9
    install:
       - requirements: requirements-dev.txt
       - method: pip
