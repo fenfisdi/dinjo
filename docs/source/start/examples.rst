@@ -1,0 +1,5 @@
+.. _start-examples:
+
+========
+Examples
+========
