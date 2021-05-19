@@ -14,6 +14,7 @@ sys.path.append(this_file_dir)
 sys.path.append(project_root_dir)
 
 from dinjo import model, predefined
+from dinjo.predefined.epidemiology import ModelSEIRV
 # State variables and parameters are setup in col_vars_params.py module
 from examples.col_vars_params import (
     seirv_state_variables_colombia,
@@ -45,7 +46,7 @@ def seirv_model_example(
 ) -> Dict[str, Any]:
 
     # Instantiate the model
-    model_SEIRV = predefined.ModelSEIRV(
+    model_SEIRV = ModelSEIRV(
         state_variables=state_variables,
         parameters=parameters,
         t_span=t_span,

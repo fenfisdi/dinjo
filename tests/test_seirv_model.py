@@ -4,7 +4,8 @@ import pytest
 from pytest import approx
 import numpy as np
 
-from dinjo import model, predefined
+from dinjo import model
+from dinjo.predefined.epidemiology import ModelSEIRV
 from examples.col_vars_params import (
     seirv_state_variables_colombia_src,
     seirv_parameters_colombia_src_ini
@@ -45,20 +46,20 @@ def model_SEIRV(state_variables, parameters):
     t_span = [0, 171]
     t_steps = 172
 
-    model_SEIRV = predefined.ModelSEIRV(state_variables, parameters, t_span, t_steps)
+    model_SEIRV = ModelSEIRV(state_variables, parameters, t_span, t_steps)
 
     return model_SEIRV
 
 
 def test_state_variables_init_vals(
-    model_SEIRV: predefined.ModelSEIRV,
+    model_SEIRV: ModelSEIRV,
     state_variables_source
 ):
     sv_init_vals = [sv[2] for sv in state_variables_source]
     assert model_SEIRV.state_variables_init_vals == sv_init_vals
 
 
-def test_parameters_init_vals(model_SEIRV: predefined.ModelSEIRV, parameters_source):
+def test_parameters_init_vals(model_SEIRV: ModelSEIRV, parameters_source):
     params = [param[2] for param in parameters_source]
     assert model_SEIRV.parameters_init_vals == params
 
@@ -119,7 +120,7 @@ def test_parameters_initialization(
 
 
 def test_model_SEIRV_build_model(
-    model_SEIRV: predefined.ModelSEIRV,
+    model_SEIRV: ModelSEIRV,
 ):
     """Tests if evaluation of differential equation defined in SEIRV model is OK"""
 
@@ -140,7 +141,7 @@ def test_model_SEIRV_build_model(
 
 
 def test_model_SEIRV_run_model_initial_value(
-    model_SEIRV: predefined.ModelSEIRV,
+    model_SEIRV: ModelSEIRV,
     state_variables: List[model.StateVariable]
 ):
     initial_state_variables = model_SEIRV.state_variables_init_vals
