@@ -24,8 +24,8 @@ project = 'DINJO'
 copyright = '2021, Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 author = 'Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 
-version = '1.0'
-release = '1.0.dev1'
+version = '0.0'
+release = '0.0.dev1'
 
 # -- General configuration ---------------------------------------------------
 
