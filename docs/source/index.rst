@@ -24,10 +24,8 @@ Getting Started
    :caption: Getting Started
    :hidden:
 
-   start/overview
    start/examples
 
-- :ref:`Overview <start-overview>`
 - :ref:`Examples <start-examples>`
 
 Install DINJO using PyPI:

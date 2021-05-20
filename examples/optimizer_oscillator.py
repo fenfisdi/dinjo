@@ -196,5 +196,5 @@ if __name__ == '__main__':
         plot_solution=True,
         save_optimization_results_pickle=True,
         save_csv_file=True,
-        date_fmt=True
+        date_fmt=False
     )
