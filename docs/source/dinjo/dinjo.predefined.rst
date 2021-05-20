@@ -1,8 +1,8 @@
 .. _code-dinjo.predefined:
 
-===============================
-:mod:`dinjo.predefined` package
-===============================
+==================================
+:mod:`dinjo.predefined` subpackage
+==================================
 
 
 Package contents
@@ -12,6 +12,7 @@ Package contents
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Subpackages
 ===========

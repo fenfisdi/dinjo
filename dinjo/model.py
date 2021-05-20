@@ -36,11 +36,11 @@ class Parameter(Variable):
     """Represents a parameter of the differential equations definining
     an initial value problem.
 
+    In addition to the attributes defined in
+    :py:class:`dinjo.model.Variable`
+
     Attributes
     ----------
-    In addition to the attributes defined in
-    :class:`dinjo.model.Variable`:
-
     bounds : 2-tuple of floats.
         list containing the minimum and maximum values that the
         parameter can take ``(min, max)``.

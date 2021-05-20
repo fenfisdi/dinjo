@@ -6,5 +6,5 @@
 
 .. automodule:: dinjo.model
    :members:
-   :undoc-members:
+   :undoc-members: reference_t_values
    :show-inheritance:

@@ -73,12 +73,13 @@ The Source Code
 
       :mod:`dinjo.predefined.epidemiology._seirv_model`
          SEIRV initial value problem.
-      
+
       :mod:`dinjo.predefined.epidemiology._seirv_fixed`
          SEIR initial value problem.
-      
+
       :mod:`dinjo.predefined.epidemiology._sir_model`
          SIR initial value problem.
+
 
 Indices and tables
 ==================

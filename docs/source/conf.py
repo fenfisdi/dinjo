@@ -50,7 +50,10 @@ exclude_patterns = []
 autodoc_default_options = {
     'members': True,
     'private-members':
-        '',
+        '_seir_model, '
+        '_seirv_model, '
+        '_seirv_fixed, '
+        '_sir_model',
     'special-members': '__init__',
     'inherited-members': False,
     'show-inheritance': False,
