@@ -256,7 +256,7 @@ def test_optimizer_minimize_global_oscillator(
 
     # Rune one assert statement for each algorithm
     for algorithm in minimize_global_algorithms:
-        optimal_parameters_oscillator = optimizer_oscillator.minimize(
+        optimal_parameters_oscillator = optimizer_oscillator.optimize(
             algorithm=algorithm
         )
         expected_parameters_oscillator = optimizer_oscillator.model.parameters_init_vals
