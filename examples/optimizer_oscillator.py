@@ -1,19 +1,18 @@
-from datetime import datetime, timedelta
 import os
-import sys
 from typing import Any, Dict, List, Union
 import pickle
+from datetime import datetime, timedelta
+
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Add project root directory to path
+from dinjo import model, optimizer
+
+
 this_file_dir = os.path.dirname(__file__)
 project_root_dir = os.path.join(this_file_dir, '..')
-sys.path.append(project_root_dir)
-
-from dinjo import model, optimizer
 
 
 class ModelOscillator(model.ModelIVP):

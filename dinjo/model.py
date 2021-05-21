@@ -151,7 +151,7 @@ class ModelIVP:
             time at which the differential equation must be evaluated.
         y : list[float]
             state vector at which the differential must be evaluated.
-        \*args : any
+        *args : any
             other parameters of the differential equation
 
         Returns

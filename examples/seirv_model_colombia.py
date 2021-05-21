@@ -1,19 +1,11 @@
-import sys
 import os
-from time import time
 from typing import Any, Dict, List, Union
+from time import time
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Add project root and this file's directories to path in order to find cmodel
-# package
-this_file_dir = os.path.dirname(__file__)
-project_root_dir = os.path.join(this_file_dir, '..')
-sys.path.append(this_file_dir)
-sys.path.append(project_root_dir)
-
-from dinjo import model, predefined
+from dinjo import model
 from dinjo.predefined.epidemiology import ModelSEIRV
 # State variables and parameters are setup in col_vars_params.py module
 from examples.col_vars_params import (
@@ -25,6 +17,9 @@ from examples.col_vars_params import (
 # Time span and time steps in days
 t_span_col = [0, 171]
 t_steps_col = 172
+
+this_file_dir = os.path.dirname(__file__)
+project_root_dir = os.path.join(this_file_dir, '..')
 
 infected_reference_col_path = os.path.join(
     this_file_dir, '..', 'example_data', 'infected_reference_col.csv'
