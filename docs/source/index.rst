@@ -12,13 +12,22 @@ DINJO |version|
 *DINJO Is Not Just An Optimizer* is a Python framework designed for the
 optimization of initial value problems' parameters.
 
-Lets say you have some 'experimental' data of a state variable :math:`S` of the
-initial value problem :math:`dS/dt = f(t, S; p), S(t_0) = f_0` where :math:`p`
-is a list of parameters.
+Lets say you have some 'experimental' data of a state variable :math:`S`
+corresponding to the initial value problem
 
-If you want to know the optimal value of :math:`p` so that the solution of the
-initial value problem fits your experimental data, you can use DINJO to get an
-approximate value of the optimal :math:`p`.
+.. math::
+   
+   d\mathbf{S}/dt &= \mathbf{f}(t, S; \mathbf{p})
+
+   \mathbf{S}(t_0) &= \mathbf{f}_0, 
+   
+where :math:`\mathbf{p}` is a list of parameters, :math:`\mathbf{f}_0` and
+:math:`t_0` are constants.
+
+If you want to know the optimal value of
+:math:`\mathbf{p}` so that the solution of the initial value problem fits your
+experimental data, you can use DINJO to get an approximate value of the optimal
+:math:`\mathbf{p}`.
 
 
 Getting Started
@@ -83,6 +92,10 @@ The Source Code
 
       :mod:`dinjo.predefined.epidemiology._sir_model`
          SIR initial value problem.
+      
+      :mod:`dinjo.predefined.physics._harmonic_oscillator`
+         Unit mass Harmonic Oscillator initial value problem. See
+         :ref:`start-examples`.
 
 
 Indices and tables

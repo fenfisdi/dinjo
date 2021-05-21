@@ -1,4 +1,4 @@
-from ._harmonic_ocsillator import ModelOscillator
+from ._harmonic_oscillator import ModelOscillator
 
 __all__ = [
     'ModelOscillator',
