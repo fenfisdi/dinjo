@@ -76,7 +76,7 @@ def test_parameters_init_vals(model_SEIRV: ModelSEIRV, parameters_source):
 def test_parameters_bounds(bounds):
     try:
         model.Parameter("a", "b", 1.5, bounds=bounds)
-    except AttributeError:
+    except ValueError:
         assert False
     else:
         assert True
@@ -95,7 +95,7 @@ def test_parameters_bounds(bounds):
     ]
 )
 def test_parameters_bounds_error_handling(initial_value, bounds):
-    with pytest.raises(AttributeError):
+    with pytest.raises(ValueError):
         model.Parameter("a", "b", initial_value, bounds=bounds)
 
 

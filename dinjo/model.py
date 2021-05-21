@@ -240,7 +240,7 @@ class ModelIVP:
         )
 
         parameters_permitted_types = (list, tuple, np.ndarray)
-        parameters_type_is_permitted = True
+        parameters_type_is_permitted = False
 
         for permitted_type in parameters_permitted_types:
             parameters_type_is_permitted += isinstance(parameters, permitted_type)
