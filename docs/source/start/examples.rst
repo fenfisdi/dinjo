@@ -16,7 +16,7 @@ The initial value problem can be stated in terms of the Hamilton equations as
 
    \frac{dq}{dt} =& \,\, p
 
-   \frac{dp}{dt} =& - \omega ^ 2 * q,
+   \frac{dp}{dt} =& - \omega ^ 2  q,
 
 
 and an initial condition :math:`q(t_0) = q_0`,  :math:`p(t_0) = p_0`, where
