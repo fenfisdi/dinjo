@@ -9,11 +9,16 @@
 DINJO |version|
 ===============
 
-*DINJO Is Not Just An Optimizer* is a Python framework designed for the optimization of initial value problems' parameters.
+*DINJO Is Not Just An Optimizer* is a Python framework designed for the
+optimization of initial value problems' parameters.
 
-Lets say you have some 'experimental' data of a state variable :math:`S` of the initial value problem :math:`dS/dt = f(t, S; p), S(t_0) = f_0` where :math:`p` is a list of parameters.
+Lets say you have some 'experimental' data of a state variable :math:`S` of the
+initial value problem :math:`dS/dt = f(t, S; p), S(t_0) = f_0` where :math:`p`
+is a list of parameters.
 
-If you want to know the optimal value of :math:`p` so that the solution of the initial value problem fits your experimental data, you can use DINJO to get an approximate value of the optimal :math:`p`.
+If you want to know the optimal value of :math:`p` so that the solution of the
+initial value problem fits your experimental data, you can use DINJO to get an
+approximate value of the optimal :math:`p`.
 
 
 Getting Started
@@ -58,7 +63,8 @@ The Source Code
    Package source code
 
    :mod:`dinjo.model`
-      Define your own initial value problems (IVPs) and solve them using this module.
+      Define your own initial value problems (IVPs) and solve them using this
+      module.
 
    :mod:`dinjo.optimizer`
       Define your IVP optimization problem and solve it using this module.
