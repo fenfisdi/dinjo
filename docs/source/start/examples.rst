@@ -195,7 +195,7 @@ The step by step process is given as follows:
          plt.show()
          plt.close()
 
-   The plot you get should be similar to the following
+   The plot you get should look similar to the following
 
       .. image:: ../_static/ho_example.png
 
