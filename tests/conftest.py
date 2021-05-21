@@ -1,8 +1,11 @@
+from typing import Any, List
 import pytest
 
 from numpy import pi
+from numpy.random import random
 
 from dinjo.model import StateVariable, Parameter
+from dinjo.optimizer import Optimizer
 from dinjo.predefined.physics import ModelOscillator
 
 
@@ -45,4 +48,33 @@ def model_oscillator(ho_state_vars, ho_params, t_span, t_steps):
         parameters=ho_params,
         t_span=t_span,
         t_steps=t_steps
+    )
+
+
+@pytest.fixture(scope='session')
+def oscillator_solution(model_oscillator: ModelOscillator):
+    return model_oscillator.run_model()
+
+
+@pytest.fixture(scope='session')
+def ho_mock_values(oscillator_solution: Any, t_steps: List[float]):
+    noise_factor = 0.3
+    return (
+        oscillator_solution.y[0]
+        + (2 * random(t_steps) - 1) * noise_factor
+    )
+
+
+@pytest.fixture(scope='session')
+def ho_optimizer(
+    model_oscillator: ModelOscillator,
+    oscillator_solution: Any,
+    ho_mock_values: List[float],
+    ho_state_vars: List[StateVariable]
+):
+    return Optimizer(
+        model_oscillator,
+        ho_state_vars[0],
+        ho_mock_values,
+        oscillator_solution.t
     )
