@@ -86,7 +86,7 @@ def oscillator_optimizer_example(
 
     # Optimize parameters
     oscillator_parameters_optimization = \
-        oscillator_optimizer.minimize(algorithm=minimization_algorithm)
+        oscillator_optimizer.optimize(algorithm=minimization_algorithm)
 
     date_equivalent = [
         datetime.now() + timedelta(days=i) for i in range(len(oscillator_solution.t))
@@ -196,5 +196,5 @@ if __name__ == '__main__':
         plot_solution=True,
         save_optimization_results_pickle=True,
         save_csv_file=True,
-        date_fmt=True
+        date_fmt=False
     )

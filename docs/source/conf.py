@@ -24,8 +24,8 @@ project = 'DINJO'
 copyright = '2021, Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 author = 'Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 
-version = '0.1.0'
-release = '0.1.0'
+version = '0.0'
+release = '0.0.dev1'
 
 # -- General configuration ---------------------------------------------------
 
@@ -50,7 +50,10 @@ exclude_patterns = []
 autodoc_default_options = {
     'members': True,
     'private-members':
-        '',
+        '_seir_model, '
+        '_seirv_model, '
+        '_seirv_fixed, '
+        '_sir_model',
     'special-members': '__init__',
     'inherited-members': False,
     'show-inheritance': False,

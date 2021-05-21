@@ -1,6 +1,6 @@
 from typing import List
 
-from ..model import ModelIVP
+from ...model import ModelIVP
 
 
 class ModelSIR(ModelIVP):
