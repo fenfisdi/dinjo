@@ -69,18 +69,18 @@ class Parameter(Variable):
         )
 
         if not type_check:
-            raise AttributeError(attr_err_message)
+            raise ValueError(attr_err_message)
 
         order_check: bool = bounds_input[0] <= bounds_input[1]
 
         if not order_check:
-            raise AttributeError(attr_err_message)
+            raise ValueError(attr_err_message)
 
         if not (
             bounds_input[0] <= self.initial_value
             and bounds_input[1] >= self.initial_value
         ):
-            raise AttributeError(init_val_not_in_bounds_range)
+            raise ValueError(init_val_not_in_bounds_range)
 
         self._bounds = bounds_input
 

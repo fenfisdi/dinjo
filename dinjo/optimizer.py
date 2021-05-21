@@ -52,7 +52,7 @@ class Optimizer:
                     reference_state_variable
                 )
         except ValueError:
-            raise AttributeError(
+            raise ValueError(
                 "self.reference_state_variable must be in model.state_variables"
             )
 
@@ -63,13 +63,13 @@ class Optimizer:
     @reference_t_values.setter
     def reference_t_values(self, reference_t_values_input: List[float]):
         if len(self.reference_values) != len(reference_t_values_input):
-            raise AttributeError(
+            raise ValueError(
                 "self.reference_values and self.reference_t_values must have the same length"
             )
 
         for i, t in enumerate(reference_t_values_input[:-1]):
             if not t < reference_t_values_input[i + 1]:
-                raise AttributeError(
+                raise ValueError(
                     "self.reference_t_values must be a list of floats in increasing order"
                 )
 
@@ -83,7 +83,7 @@ class Optimizer:
             )
 
         if not t_span_condition:
-            raise AttributeError(
+            raise ValueError(
                 "self.model.t_span and self.reference_t_values initial and "
                 "final entries must coincide."
             )
