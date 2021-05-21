@@ -47,7 +47,7 @@ class Parameter(Variable):
     """
     def __init__(
         self, name: str, representation: str, initial_value: float = 0,
-        *args, bounds: Optional[List[float]] = None, **kwargs
+        bounds: Optional[List[float]] = None, *args, **kwargs
     ) -> None:
         super().__init__(name, representation, initial_value)
         self.bounds = bounds if bounds else [initial_value, initial_value]
