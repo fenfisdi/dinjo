@@ -8,7 +8,7 @@ import pandas as pd
 from dinjo import model
 from dinjo.predefined.epidemiology import ModelSEIRV
 # State variables and parameters are setup in col_vars_params.py module
-from examples.col_vars_params import (
+from col_vars_params import (
     seirv_state_variables_colombia,
     seirv_parameters_colombia
 )

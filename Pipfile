@@ -22,9 +22,9 @@ dinjo = {editable = true, path = "."}
 tests = "python -m pytest tests"
 tests-cov = "python -m pytest tests --cov dinjo"
 tests-cov-html = "python -m pytest tests --cov-report html --cov dinjo"
-linter = "flake8 dinjo tests examples --max-line-length=99"
+linter = "flake8 src/dinjo tests examples --max-line-length=99"
 docs = "make -C docs html"
-docs-latex = "make -C docs latexpdf"
+docs-latex = "make -C docs latexpdf LATEXMKOPTS='-silent'"
 docs-clean = "make -C docs clean"
 
 [requires]
