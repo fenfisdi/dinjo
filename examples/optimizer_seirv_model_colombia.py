@@ -1,6 +1,5 @@
 # Optimize the seirv model for colombia
-# This script may take some hours to execute
-import sys
+# This script may take several minutes to execute
 import os
 import pickle
 from time import time
@@ -11,19 +10,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from cmodel_examples_utilities import int_to_str_date, setup_csv
-
-# Add project root and this file's directories to path in order to find cmodel
-# package
-this_file_dir = os.path.dirname(__file__)
-project_root_dir = os.path.join(this_file_dir, '..')
-sys.path.append(this_file_dir)
-sys.path.append(project_root_dir)
-
 import dinjo.optimizer as optimizer
 from seirv_model_colombia import (
     seirv_state_variables_colombia, seirv_model_example, infected_reference_col
 )
+from cmodel_examples_utilities import int_to_str_date, setup_csv
+
+
+this_file_dir = os.path.dirname(__file__)
+project_root_dir = os.path.join(this_file_dir, '..')
 
 
 def optimizer_seirv_model_colombia_example(

@@ -47,7 +47,7 @@ class Parameter(Variable):
     """
     def __init__(
         self, name: str, representation: str, initial_value: float = 0,
-        *args, bounds: Optional[List[float]] = None, **kwargs
+        bounds: Optional[List[float]] = None, *args, **kwargs
     ) -> None:
         super().__init__(name, representation, initial_value)
         self.bounds = bounds if bounds else [initial_value, initial_value]
@@ -69,18 +69,18 @@ class Parameter(Variable):
         )
 
         if not type_check:
-            raise AttributeError(attr_err_message)
+            raise ValueError(attr_err_message)
 
         order_check: bool = bounds_input[0] <= bounds_input[1]
 
         if not order_check:
-            raise AttributeError(attr_err_message)
+            raise ValueError(attr_err_message)
 
         if not (
             bounds_input[0] <= self.initial_value
             and bounds_input[1] >= self.initial_value
         ):
-            raise AttributeError(init_val_not_in_bounds_range)
+            raise ValueError(init_val_not_in_bounds_range)
 
         self._bounds = bounds_input
 
@@ -151,7 +151,7 @@ class ModelIVP:
             time at which the differential equation must be evaluated.
         y : list[float]
             state vector at which the differential must be evaluated.
-        \*args : any
+        *args : any
             other parameters of the differential equation
 
         Returns
@@ -240,7 +240,7 @@ class ModelIVP:
         )
 
         parameters_permitted_types = (list, tuple, np.ndarray)
-        parameters_type_is_permitted = True
+        parameters_type_is_permitted = False
 
         for permitted_type in parameters_permitted_types:
             parameters_type_is_permitted += isinstance(parameters, permitted_type)

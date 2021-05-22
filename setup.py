@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name='DINJO',
-    version='0.0.0',
+    version='0.0.dev1',
     description='DINJO lets you find optimal values of initial value problems\' parameters',
     long_description=long_description,
     long_description_content_type="text/markdown",
