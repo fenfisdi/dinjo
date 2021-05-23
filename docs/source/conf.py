@@ -15,8 +15,9 @@ import sys
 
 import sphinx_rtd_theme                                                 # noqa
 
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
+from dinjo import VERSION
 
 # -- Project information -----------------------------------------------------
 
@@ -24,8 +25,10 @@ project = 'DINJO'
 copyright = '2021, Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 author = 'Juan Esteban Aristizabal-Zuluaga and FEnFiSDi'
 
-version = '0.0'
-release = '0.0.dev1'
+dinjo_version = VERSION.split('.')
+
+version = '.'.join(dinjo_version[:2])
+release = '.'.join(dinjo_version[:3])
 
 # -- General configuration ---------------------------------------------------
 
